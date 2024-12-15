@@ -1,9 +1,9 @@
-import { motion } from 'framer-motion';
-import { Button } from '@/components/ui/button';
-import { fetchConfig } from '@/lib/config';
-import { useEffect, useState } from 'react';
-import { ArrowRight, Github, Linkedin, Mail } from 'lucide-react';
-import { Badge } from './ui/badge';
+import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { fetchConfig } from "@/lib/config";
+import { useEffect, useState } from "react";
+import { ArrowRight, Github, Linkedin, Mail } from "lucide-react";
+import { Badge } from "./ui/badge";
 
 interface BrandingConfig {
   name: string;
@@ -53,7 +53,8 @@ export default function Home() {
             Available for hire
           </Badge>
           <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
-            Hi, I'm {branding.name}
+            {"Hi, I'm "}
+            {branding.name}
           </h1>
           <h2 className="text-2xl md:text-3xl text-muted-foreground font-medium">
             {branding.tagline}

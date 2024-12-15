@@ -1,7 +1,7 @@
-import { motion } from 'framer-motion';
-import { IconMap } from './ui/icons';
-import { fetchConfig } from '@/lib/config';
-import { useEffect, useState } from 'react';
+import { motion } from "framer-motion";
+import { IconMap } from "./ui/icons";
+import { fetchConfig } from "@/lib/config";
+import { useEffect, useState } from "react";
 
 interface FooterConfig {
   copyright: string;
@@ -34,7 +34,7 @@ export default function Footer() {
   const { links, footer } = config;
 
   return (
-    <footer className="py-8 px-4 bg-secondary text-secondary-foreground">
+    <footer className="py-8 px-4 bg-secondary text-secondary-foreground absolute sticky bottom-0">
       <div className="max-w-lg mx-auto text-center space-y-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -65,7 +65,10 @@ export default function Footer() {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="text-sm"
         >
-          {footer.copyright.replace('{year}', new Date().getFullYear().toString())}
+          {footer.copyright.replace(
+            "{year}",
+            new Date().getFullYear().toString()
+          )}
         </motion.p>
       </div>
     </footer>

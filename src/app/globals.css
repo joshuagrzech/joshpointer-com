@@ -1,7 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
- 
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -30,7 +30,7 @@
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
   }
- 
+
   .dark {
     --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
@@ -80,4 +80,14 @@ canvas {
 
 .canvas-container canvas {
   pointer-events: auto;
+}
+
+.htmlScreen {
+  pointer-events: auto;
+  overflow: hidden;
+  border-radius: 24px;
+}
+
+.htmlScreen > div {
+  transform-origin: top left;
 }

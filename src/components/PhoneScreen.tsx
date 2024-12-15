@@ -83,25 +83,6 @@ export default function PhoneScreen() {
   if (isPortrait) {
     return (
       <div className="relative w-full min-h-screen bg-gradient-to-b from-slate-100 to-slate-200 overflow-hidden">
-        {/* Notch */}
-        <div className="absolute top-6 left-1/2 -translate-x-1/2 w-1/4 h-[32px] bg-black rounded-2xl" />
-        {/* iOS Status Bar */}
-        <div className="absolute top-2 w-full h-8 px-4 flex justify-between items-center bg-transparent">
-          <div className="text-lg font-medium">9:41</div>
-          <div className="flex items-center space-x-2">
-            <div className="w-4 h-4"></div>
-            <div className="w-4 h-4">
-              <svg viewBox="0 0 24 24" className="w-full h-full scale-150">
-                <path
-                  fill="currentColor"
-                  d="M2 9.5V14.5H5L9 19.5V4.5L5 9.5H2Z"
-                />
-              </svg>
-            </div>
-            <div className="w-10 h-4 bg-current rounded-sm" />
-          </div>
-        </div>
-
         {/* Widget */}
         <div className="px-4 mt-20">
           <motion.div
@@ -148,9 +129,7 @@ export default function PhoneScreen() {
   }
 
   return (
-    <div className="relative w-[300px] h-[600px] bg-gradient-to-b from-slate-100 to-slate-200 rounded-[40px] shadow-xl overflow-hidden border-4 border-slate-300">
-      {/* Notch */}
-      <div className="absolute top-2 left-1/2 -translate-x-1/2 w-1/4 h-[24px] bg-black rounded-2xl" />
+    <div className="relative w-[314px] h-[668px] text-white rounded-[50px] shadow-xl border-4 border-black">
       {/* iOS Status Bar */}
       <div className="absolute top-0 w-full h-8 px-8 pt-2 flex justify-between items-center bg-transparent">
         <div className="text-xs font-medium">9:41</div>
@@ -164,6 +143,7 @@ export default function PhoneScreen() {
           <div className="w-6 h-3 bg-current rounded-sm" />
         </div>
       </div>
+
       {/* Widget */}
       <div className="px-4 pt-12">
         <motion.div
@@ -187,7 +167,7 @@ export default function PhoneScreen() {
               onClick={() => setRoute(item.id)}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className={`relative flex flex-col items-center justify-center`}
+              className="relative flex flex-col items-center justify-center"
             >
               <div
                 className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${getGradientColor(
@@ -196,9 +176,7 @@ export default function PhoneScreen() {
               >
                 {getIcon(item.icon)}
               </div>
-              <span className="text-xs mt-2 font-medium text-gray-900">
-                {item.label}
-              </span>
+              <span className="text-xs mt-2 font-medium">{item.label}</span>
             </motion.button>
           ))}
         </div>

@@ -10,6 +10,7 @@ import Layout from "@/components/Layout";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { ScrollProgress } from "@/components/ScrollProgress";
 import { PageTransition } from "@/components/PageTransition";
+import { PerspectiveCamera } from "@react-three/drei";
 
 export default function Home() {
   const { width, height } = useWindowSize();
@@ -26,17 +27,12 @@ export default function Home() {
   return (
     <Layout>
       <ScrollProgress />
-      <div className="fixed left-0 w-1/3 lg:w-2/5 h-screen">
-        <Canvas
-          camera={{
-            position: [0, 0, 5],
-            fov: 45,
-            near: 0.1,
-            far: 1000,
-          }}
-        >
+      <div className="fixed left-0 w-1/3 lg:w-2/5 h-screen overflow-visible">
+        <Canvas>
           <Suspense fallback={<LoadingSpinner />}>
-            <FloatingPhone />
+            <PerspectiveCamera position={[0, 0, 1.25]}>
+              <FloatingPhone />
+            </PerspectiveCamera>
           </Suspense>
         </Canvas>
       </div>
