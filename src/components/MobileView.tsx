@@ -8,7 +8,8 @@ import About from "./About";
 import Skills from "./Skills";
 
 import type { NavItem } from "@/lib/types";
-import PhoneScreen, { getIcon } from "./PhoneScreen";
+import PhoneScreen from "./PhoneScreen";
+import { IconMap } from "./ui/icons";
 
 const navItems: NavItem[] = [
   { id: "home", label: "Home", icon: "home" },
@@ -66,20 +67,23 @@ export default function MobileView() {
       {currentRoute !== "home" && (
         <nav className="h-16 bg-background/80 backdrop-blur-lg border-t fixed bottom-0 left-0 right-0">
           <div className="h-full max-w-lg mx-auto px-4 flex items-center justify-around">
-            {navItems.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => setRoute(item.id)}
-                className={`flex flex-col items-center justify-center space-y-1 ${
-                  currentRoute === item.id
-                    ? "text-primary"
-                    : "text-muted-foreground"
-                }`}
-              >
-                {getIcon(item.icon)}
-                <span className="text-xs">{item.label}</span>
-              </button>
-            ))}
+            {navItems.map((item) => {
+              const Icon = IconMap[item.icon];
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => setRoute(item.id)}
+                  className={`flex flex-col items-center justify-center space-y-1 ${
+                    currentRoute === item.id
+                      ? "text-primary"
+                      : "text-muted-foreground"
+                  }`}
+                >
+                  <Icon size={24} />
+                  <span className="text-xs">{item.label}</span>
+                </button>
+              );
+            })}
           </div>
         </nav>
       )}

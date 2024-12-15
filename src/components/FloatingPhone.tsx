@@ -16,14 +16,14 @@ export default function FloatingPhone() {
     <>
       <ambientLight intensity={0.5} />
       <directionalLight position={[10, 10, 5]} intensity={1} />
-      <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
+      <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5} castShadow>
         <group ref={phoneRef}>
           <Html
             transform
             position={[0, 0, 0.11]}
             scale={0.2}
+            castShadow
             rotation={[0, 0, 0]}
-            transform
             occlude
           >
             <PhoneScreen />

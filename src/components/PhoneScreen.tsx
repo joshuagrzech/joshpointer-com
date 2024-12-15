@@ -11,6 +11,8 @@ import {
   Book,
 } from "lucide-react";
 import { useWindowSize } from "@/hooks/useWindowSize";
+import { useEffect, useState } from "react";
+import { fetchConfig } from "@/lib/config";
 
 export const getIcon = (icon: string) => {
   switch (icon) {
@@ -66,7 +68,18 @@ export default function PhoneScreen() {
   const { setRoute } = useNavigationStore();
   const { width, height } = useWindowSize();
   const isPortrait = height > width;
+  const [branding, setBranding] = useState<any | null>({
+    name: "",
+    tagline: "",
+  });
 
+  useEffect(() => {
+    async function loadConfig() {
+      const data = await fetchConfig();
+      setBranding(data.branding);
+    }
+    loadConfig();
+  }, []);
   if (isPortrait) {
     return (
       <div className="relative w-full min-h-screen bg-gradient-to-b from-slate-100 to-slate-200 overflow-hidden">
@@ -96,8 +109,10 @@ export default function PhoneScreen() {
             animate={{ opacity: 1, y: 0 }}
             className="w-full bg-white/60 backdrop-blur-xl rounded-3xl p-6 shadow-lg"
           >
-            <h1 className="text-2xl font-semibold text-gray-900">John Doe</h1>
-            <p className="text-sm text-gray-600">Mobile Developer</p>
+            <h1 className="text-2xl font-semibold text-gray-900">
+              {branding.name}
+            </h1>
+            <p className="text-sm text-gray-600">{branding.tagline}</p>
           </motion.div>
         </div>
 
@@ -156,14 +171,16 @@ export default function PhoneScreen() {
           animate={{ opacity: 1, y: 0 }}
           className="w-full bg-white/60 backdrop-blur-xl rounded-3xl p-4 shadow-lg"
         >
-          <h1 className="text-xl font-semibold text-gray-900">John Doe</h1>
-          <p className="text-xs text-gray-600">Mobile Developer</p>
+          <h1 className="text-xl font-semibold text-gray-900">
+            {branding.name}
+          </h1>
+          <p className="text-xs text-gray-600">{branding.tagline}</p>
         </motion.div>
       </div>
 
       {/* App Grid */}
       <div className="p-4 mt-4">
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-4 gap-4">
           {navItems.map((item, index) => (
             <motion.button
               key={item.id}

@@ -6,6 +6,7 @@ import FloatingPhone from "@/components/FloatingPhone";
 import ContentView from "@/components/ContentView";
 import { useWindowSize } from "@/hooks/useWindowSize";
 import MobileView from "@/components/MobileView";
+import Layout from "@/components/Layout";
 
 export default function Home() {
   const { width, height } = useWindowSize();
@@ -16,7 +17,7 @@ export default function Home() {
   }
 
   return (
-    <main className="relative min-h-screen">
+    <Layout>
       <div className="fixed left-0 w-1/3 lg:w-2/5 h-screen">
         <Canvas
           camera={{
@@ -34,6 +35,6 @@ export default function Home() {
       <div className="absolute right-0 w-2/3 lg:w-3/5 min-h-screen">
         <ContentView />
       </div>
-    </main>
+    </Layout>
   );
 }
