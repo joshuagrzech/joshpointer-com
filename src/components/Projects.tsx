@@ -1,33 +1,52 @@
-import { motion } from 'framer-motion'
-import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card'
-import { useWindowSize } from '@/hooks/useWindowSize'
+import { motion } from 'framer-motion';
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from '@/components/ui/hover-card';
+import { useWindowSize } from '@/hooks/useWindowSize';
 
 export default function Projects() {
-  const { width } = useWindowSize()
-  const isPortrait = width < 768
+  const { width } = useWindowSize();
+  const isPortrait = width < 768;
 
   const projects = [
     {
-      title: "E-commerce App",
-      description: "A full-featured mobile commerce platform built with React Native and TypeScript, featuring Redux for state management and Stripe for payments.",
-      tech: "React Native, TypeScript, Redux",
-      image: "/project1.png"
+      title: 'E-commerce App',
+      description:
+        'A full-featured mobile commerce platform built with React Native and TypeScript, featuring Redux for state management and Stripe for payments.',
+      tech: 'React Native, TypeScript, Redux, Stripe',
+      image: '/project1.png',
+      github: 'https://github.com/johndoe/ecommerce-app',
+      demo: 'https://ecommerce-app-demo.com',
     },
     {
-      title: "Social Media Platform",
-      description: "Native iOS social networking app developed using Swift and SwiftUI, integrated with Firebase for real-time updates and cloud storage.",
-      tech: "Swift, SwiftUI, Firebase",
-      image: "/project2.png"
+      title: 'Social Media Platform',
+      description:
+        'Native iOS social networking app developed using Swift and SwiftUI, integrated with Firebase for real-time updates and cloud storage.',
+      tech: 'Swift, SwiftUI, Firebase',
+      image: '/project2.png',
+      github: 'https://github.com/johndoe/social-media-app',
+      demo: 'https://social-media-app-demo.com',
     },
     {
-      title: "Fitness Tracking App",
-      description: "Cross-platform fitness application with real-time workout tracking, social features, and cloud sync using AWS AppSync.",
-      tech: "React Native, GraphQL, AWS",
-      image: "/project3.png"
-    }
-  ]
+      title: 'Fitness Tracking App',
+      description:
+        'Cross-platform fitness application with real-time workout tracking, social features, and cloud sync using AWS AppSync.',
+      tech: 'React Native, GraphQL, AWS',
+      image: '/project3.png',
+      github: 'https://github.com/johndoe/fitness-tracking-app',
+      demo: 'https://fitness-tracking-app-demo.com',
+    },
+  ];
 
-  const ProjectCard = ({ project, index }: { project: typeof projects[0], index: number }) => {
+  const ProjectCard = ({
+    project,
+    index,
+  }: {
+    project: typeof projects[0];
+    index: number;
+  }) => {
     if (isPortrait) {
       return (
         <motion.div
@@ -38,10 +57,30 @@ export default function Projects() {
         >
           <div className="aspect-video bg-muted rounded-lg mb-4" />
           <h3 className="text-xl font-semibold mb-2">{project.title}</h3>
-          <p className="text-muted-foreground mb-4">{project.description}</p>
+          <p className="text-muted-foreground mb-4">
+            {project.description}
+          </p>
           <p className="text-sm text-muted-foreground">{project.tech}</p>
+          <div className="mt-4 flex space-x-4">
+            <a
+              href={project.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500 hover:underline"
+            >
+              GitHub
+            </a>
+            <a
+              href={project.demo}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500 hover:underline"
+            >
+              Live Demo
+            </a>
+          </div>
         </motion.div>
-      )
+      );
     }
 
     return (
@@ -65,16 +104,36 @@ export default function Projects() {
             <p className="text-sm text-muted-foreground">
               {project.description}
             </p>
+            <div className="mt-4 flex space-x-4">
+              <a
+                href={project.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-500 hover:underline"
+              >
+                GitHub
+              </a>
+              <a
+                href={project.demo}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-500 hover:underline"
+              >
+                Live Demo
+              </a>
+            </div>
           </div>
         </HoverCardContent>
       </HoverCard>
-    )
-  }
+    );
+  };
 
   return (
-    <section className="py-8 md:py-12 lg:py-20 px-4 md:px-8">
+    <section id="projects" className="py-8 md:py-12 lg:py-20 px-4 md:px-8">
       <div className="max-w-6xl mx-auto">
-        <h2 className="text-3xl md:text-4xl font-bold mb-8 md:mb-12 text-center">Featured Projects</h2>
+        <h2 className="text-3xl md:text-4xl font-bold mb-8 md:mb-12 text-center">
+          Featured Projects
+        </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           {projects.map((project, index) => (
             <ProjectCard key={index} project={project} index={index} />
@@ -82,5 +141,5 @@ export default function Projects() {
         </div>
       </div>
     </section>
-  )
+  );
 }

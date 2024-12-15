@@ -1,4 +1,4 @@
-export type Route = 'home' | 'projects' | 'contact' | 'blog' | 'links';
+export type Route = 'home' | 'about' | 'projects' | 'skills' | 'contact' | 'blog' | 'links';
 
 export interface NavItem {
   id: Route;

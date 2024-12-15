@@ -1,18 +1,18 @@
-'use client'
+"use client";
 
-import { Canvas } from '@react-three/fiber'
-import { Suspense } from 'react'
-import FloatingPhone from '@/components/FloatingPhone'
-import ContentView from '@/components/ContentView'
-import MobileView from '@/components/MobileView'
-import { useWindowSize } from '@/hooks/useWindowSize'
+import { Canvas } from "@react-three/fiber";
+import { Suspense } from "react";
+import FloatingPhone from "@/components/FloatingPhone";
+import ContentView from "@/components/ContentView";
+import { useWindowSize } from "@/hooks/useWindowSize";
+import MobileView from "@/components/MobileView";
 
 export default function Home() {
-  const { width, height } = useWindowSize()
-  const isPortrait = height > width
+  const { width, height } = useWindowSize();
+  const isPortrait = height > width;
 
   if (isPortrait) {
-    return <MobileView />
+    return <MobileView />;
   }
 
   return (
@@ -23,7 +23,7 @@ export default function Home() {
             position: [0, 0, 5],
             fov: 45,
             near: 0.1,
-            far: 1000
+            far: 1000,
           }}
         >
           <Suspense fallback={null}>
@@ -35,5 +35,5 @@ export default function Home() {
         <ContentView />
       </div>
     </main>
-  )
+  );
 }
