@@ -27,7 +27,7 @@ export default function ContentView() {
   }
 
   return (
-    <div className="absolute top-0 right-0 w-2/3 h-full">
+    <div className="h-full p-4 md:p-8 lg:p-12">
       <AnimatePresence mode="wait">
         <motion.div
           key={currentRoute}

@@ -20,7 +20,7 @@ export default function Blog() {
   ]
 
   return (
-    <div className="h-full p-8 overflow-auto">
+    <div className="max-w-4xl mx-auto py-8 px-4 md:py-12 lg:py-16">
       <h2 className="text-3xl font-bold mb-8">Blog</h2>
       <div className="space-y-6">
         {posts.map((post, index) => (

@@ -21,7 +21,7 @@ export default function Links() {
   ]
 
   return (
-    <div className="h-full p-8">
+    <div className="max-w-lg mx-auto py-8 px-4 md:py-12">
       <h2 className="text-3xl font-bold mb-8">Links</h2>
       <div className="grid gap-4">
         {links.map((link, index) => (
