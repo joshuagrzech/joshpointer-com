@@ -57,7 +57,7 @@ function RootCanvasClientComponent() {
           dpr={[1, 2] as [number, number]}
         >
           <Environment preset="city" />
-          <PerspectiveCamera makeDefault fov={30} position={[0, 0, 5]} />
+          <PerspectiveCamera makeDefault fov={30} position={[0, 0, 0]} />
 
           <FloatingPhone
             mousePosition={mousePosition}

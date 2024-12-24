@@ -15,6 +15,7 @@ import { useSpring, animated } from "@react-spring/three";
 import { useThree } from "@react-three/fiber";
 import { useNavigation } from "@/hooks/useNavigation";
 import PhoneScreen from "./PhoneScreen";
+import { reactSpringConfig } from "@/constants/animations";
 
 interface FloatingPhoneProps {
   mousePosition: { x: number; y: number };
@@ -68,18 +69,12 @@ const FloatingPhone = memo(({
   // Camera animation spring
   const cameraSpring = useSpring({
     to: {
-      cameraPosition: !isHome 
-        ? [-2, 1, 2] // Position when not home
-        : [0, 0, 5], // Default camera position
+      cameraPosition: [0, 0, 3.5], // Default camera position
       cameraRotation: !isHome
         ? [-0.2, -0.5, 0] // Rotation when not home
         : [0, 0, 0], // Default camera rotation
     },
-    config: {
-      mass: 1,
-      tension: 170,
-      friction: 26,
-    },
+    config: reactSpringConfig.default,
   });
 
   // Model animation spring
@@ -89,11 +84,7 @@ const FloatingPhone = memo(({
       rotation: !isHome ? [0, Math.PI / 1.75, 0] : [0, Math.PI / 2, 0],
       scale: [1, 1, 1],
     },
-    config: {
-      mass: 1,
-      tension: 170,
-      friction: 26,
-    },
+    config: reactSpringConfig.default,
   });
 
   // Update camera position and rotation based on spring values

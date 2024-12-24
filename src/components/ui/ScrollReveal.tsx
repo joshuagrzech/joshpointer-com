@@ -1,5 +1,6 @@
 import { motion, useInView } from "framer-motion";
 import { useRef, type ReactNode } from "react";
+import { framerMotionConfig } from "@/constants/animations";
 
 interface ScrollRevealProps {
   children: ReactNode;
@@ -15,7 +16,7 @@ export default function ScrollReveal({ children, width = "fit-content" }: Scroll
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-        transition={{ duration: 0.4, ease: "easeOut" }}
+        transition={framerMotionConfig.slow}
       >
         {children}
       </motion.div>

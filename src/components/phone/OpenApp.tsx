@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { AppContent } from "@/components/AppContent";
 import type { OpenAppProps } from "@/types";
 import { useNavigation } from '@/hooks/useNavigation';
+import { framerMotionConfig } from "@/constants/animations";
 
 export const OpenApp: React.FC<OpenAppProps> = ({
   activeApp,
@@ -37,10 +38,7 @@ export const OpenApp: React.FC<OpenAppProps> = ({
         }px)`,
         opacity: 0,
       }}
-      transition={{
-        duration: 0.3,
-        ease: [0.4, 0, 0.2, 1],
-      }}
+      transition={framerMotionConfig.default}
       className="absolute inset-0 z-50"
     >
       {activeApp && (
