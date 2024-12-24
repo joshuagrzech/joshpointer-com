@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { IconMap } from './ui/icons';
+import { IconMap } from '@/components/ui/icons';
 
 export default function Links() {
   const links = [
@@ -25,7 +25,7 @@ export default function Links() {
       <h2 className="text-3xl font-bold mb-8">Links</h2>
       <div className="grid gap-4">
         {links.map((link, index) => {
-          const Icon = IconMap[link.icon];
+          const Icon = IconMap[link.icon as keyof typeof IconMap];
           return (
             <motion.a
               key={index}

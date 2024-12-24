@@ -1,7 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  test: /\.(glb|gltf)$/,
-  type: "asset/resource",
+  reactStrictMode: true,
+  swcMinify: true,
+  experimental: {
+    optimizeCss: true,
+  }
 };
 
 export default nextConfig;
