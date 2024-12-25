@@ -1,0 +1,331 @@
+{
+  "theme": {
+    "colors": {
+      "light": {
+        "background": "0 0% 100%",
+        "foreground": "240 10% 3.9%",
+        "card": "0 0% 100%",
+        "card-foreground": "240 10% 3.9%",
+        "popover": "0 0% 100%",
+        "popover-foreground": "240 10% 3.9%",
+        "primary": "240 5.9% 10%",
+        "primary-foreground": "0 0% 98%",
+        "secondary": "240 4.8% 95.9%",
+        "secondary-foreground": "240 5.9% 10%",
+        "muted": "240 4.8% 95.9%",
+        "muted-foreground": "240 3.8% 46.1%",
+        "accent": "240 4.8% 95.9%",
+        "accent-foreground": "240 5.9% 10%",
+        "destructive": "0 84.2% 60.2%",
+        "destructive-foreground": "0 0% 98%",
+        "border": "240 5.9% 90%",
+        "input": "240 5.9% 90%",
+        "ring": "240 10% 3.9%"
+      },
+      "dark": {
+        "background": "240 10% 3.9%",
+        "foreground": "0 0% 98%",
+        "card": "240 10% 3.9%",
+        "card-foreground": "0 0% 98%",
+        "popover": "240 10% 3.9%",
+        "popover-foreground": "0 0% 98%",
+        "primary": "0 0% 98%",
+        "primary-foreground": "240 5.9% 10%",
+        "secondary": "240 3.7% 15.9%",
+        "secondary-foreground": "0 0% 98%",
+        "muted": "240 3.7% 15.9%",
+        "muted-foreground": "240 5% 64.9%",
+        "accent": "240 3.7% 15.9%",
+        "accent-foreground": "0 0% 98%",
+        "destructive": "0 62.8% 30.6%",
+        "destructive-foreground": "0 0% 98%",
+        "border": "240 3.7% 15.9%",
+        "input": "240 3.7% 15.9%",
+        "ring": "240 4.9% 83.9%"
+      },
+      "chart": {
+        "1": "12 76% 61%",
+        "2": "173 58% 39%",
+        "3": "197 37% 24%",
+        "4": "43 74% 66%",
+        "5": "27 87% 67%"
+      }
+    },
+    "radius": {
+      "default": "0.5rem",
+      "sm": "calc(0.5rem - 4px)",
+      "md": "calc(0.5rem - 2px)",
+      "lg": "0.5rem"
+    },
+    "animation": {
+      "framerMotion": {
+        "default": {
+          "duration": 0.3,
+          "ease": [0.4, 0, 0.2, 1]
+        },
+        "slow": {
+          "duration": 0.5,
+          "ease": [0.4, 0, 0.2, 1]
+        },
+        "spring": {
+          "type": "spring",
+          "stiffness": 170,
+          "damping": 26
+        }
+      },
+      "reactSpring": {
+        "default": {
+          "mass": 1,
+          "tension": 170,
+          "friction": 26
+        },
+        "slow": {
+          "mass": 1,
+          "tension": 120,
+          "friction": 30
+        }
+      },
+      "timing": {
+        "fast": 0.2,
+        "default": 0.3,
+        "slow": 0.5
+      },
+      "easings": {
+        "default": [0.4, 0, 0.2, 1],
+        "easeOut": [0, 0, 0.2, 1],
+        "easeIn": [0.4, 0, 1, 1]
+      }
+    },
+    "fonts": {
+      "custom": [
+        {
+          "family": "Inter",
+          "url": "/fonts/Inter-Regular.woff2",
+          "weight": 400,
+          "style": "normal"
+        },
+        {
+          "family": "Inter",
+          "url": "/fonts/Inter-Medium.woff2",
+          "weight": 500,
+          "style": "normal"
+        },
+        {
+          "family": "Inter",
+          "url": "/fonts/Inter-SemiBold.woff2",
+          "weight": 600,
+          "style": "normal"
+        },
+        {
+          "family": "Inter",
+          "url": "/fonts/Inter-Bold.woff2",
+          "weight": 700,
+          "style": "normal"
+        }
+      ],
+      "variables": {
+        "sans": "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
+        "mono": "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
+        "heading": "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif"
+      }
+    }
+  },
+  "branding": {
+    "name": "Josh Pointer",
+    "tagline": "Mobile Software Engineer",
+    "description": "Crafting exceptional mobile experiences with React Native & iOS. I bring ideas to life through intuitive and performant mobile applications.",
+    "logo": "/logo.png",
+    "favicon": "/favicon.ico",
+    "metadata": {
+      "title": "Mobile Software Engineer Portfolio",
+      "description": "React Native & iOS Developer Portfolio",
+      "language": "en"
+    }
+  },
+  "ui": {
+    "buttons": {
+      "variants": {
+        "default": "bg-primary text-primary-foreground shadow hover:bg-primary/90",
+        "destructive": "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
+        "outline": "border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground",
+        "secondary": "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
+        "ghost": "hover:bg-accent hover:text-accent-foreground",
+        "link": "text-primary underline-offset-4 hover:underline"
+      },
+      "sizes": {
+        "default": "h-9 px-4 py-2",
+        "sm": "h-8 rounded-md px-3 text-xs",
+        "lg": "h-10 rounded-md px-8",
+        "icon": "h-9 w-9"
+      }
+    },
+    "badges": {
+      "variants": {
+        "default": "border-transparent bg-primary text-primary-foreground shadow hover:bg-primary/80",
+        "secondary": "border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80",
+        "destructive": "border-transparent bg-destructive text-destructive-foreground shadow hover:bg-destructive/80",
+        "outline": "text-foreground"
+      }
+    }
+  },
+  "navigation": [
+    { "id": "home", "label": "Home", "icon": "home" },
+    { "id": "about", "label": "About", "icon": "user" },
+    { "id": "projects", "label": "Projects", "icon": "folder" },
+    { "id": "skills", "label": "Skills", "icon": "wrench" },
+    { "id": "blog", "label": "Blog", "icon": "book" },
+    { "id": "links", "label": "Links", "icon": "link" },
+    { "id": "contact", "label": "Contact", "icon": "mail" }
+  ],
+  "hero": {
+    "title": "Mobile Software Engineer",
+    "description": "Crafting exceptional mobile experiences with React Native & iOS. I bring ideas to life through intuitive and performant mobile applications.",
+    "cta": {
+      "label": "View Projects",
+      "url": "#projects"
+    }
+  },
+  "about": {
+    "title": "About Me",
+    "content": "I'm a passionate mobile developer with over 5 years of experience in creating high-performance, user-friendly mobile applications. My expertise lies in React Native and iOS development, and I'm always eager to learn and explore new technologies. I'm driven by the challenge of building innovative solutions that solve real-world problems and enhance user experiences. My goal is to contribute my skills and passion to a dynamic team where I can continue to grow and make a significant impact."
+  },
+  "process": {
+    "title": "Development Process",
+    "steps": [
+      {
+        "title": "Plan & Design",
+        "description": "Understand requirements, create wireframes, and plan the architecture.",
+        "icon": "lightbulb"
+      },
+      {
+        "title": "Develop",
+        "description": "Write clean, maintainable code following best practices and patterns.",
+        "icon": "code"
+      },
+      {
+        "title": "Test & Review",
+        "description": "Thoroughly test features and conduct code reviews to ensure quality.",
+        "icon": "check"
+      },
+      {
+        "title": "Deploy",
+        "description": "Deploy to production using automated CI/CD pipelines.",
+        "icon": "rocket"
+      }
+    ]
+  },
+  "testimonials": {
+    "title": "Client Testimonials",
+    "items": [
+      {
+        "content": "An exceptional developer who consistently delivers high-quality work. Their attention to detail and problem-solving skills are outstanding.",
+        "author": "Sarah Johnson",
+        "role": "CTO",
+        "company": "Tech Innovations"
+      },
+      {
+        "content": "Working with them was a great experience. They not only delivered the project on time but also provided valuable insights throughout the development process.",
+        "author": "Michael Chen",
+        "role": "Product Manager",
+        "company": "Digital Solutions"
+      },
+      {
+        "content": "Their technical expertise and ability to understand complex requirements made our project a success. Highly recommended!",
+        "author": "Emily Rodriguez",
+        "role": "Engineering Lead",
+        "company": "Software Corp"
+      }
+    ]
+  },
+  "projects": [
+    {
+      "title": "E-commerce App",
+      "description": "A full-featured mobile commerce platform built with React Native and TypeScript, featuring Redux for state management and Stripe for payments.",
+      "tech": "React Native, TypeScript, Redux, Stripe",
+      "image": "/project1.png",
+      "github": "https://github.com/johndoe/ecommerce-app",
+      "demo": "https://ecommerce-app-demo.com"
+    },
+    {
+      "title": "Social Media Platform",
+      "description": "Native iOS social networking app developed using Swift and SwiftUI, integrated with Firebase for real-time updates and cloud storage.",
+      "tech": "Swift, SwiftUI, Firebase",
+      "image": "/project2.png",
+      "github": "https://github.com/johndoe/social-media-app",
+      "demo": "https://social-media-app-demo.com"
+    },
+    {
+      "title": "Fitness Tracking App",
+      "description": "Cross-platform fitness application with real-time workout tracking, social features, and cloud sync using AWS AppSync.",
+      "tech": "React Native, GraphQL, AWS",
+      "image": "/project3.png",
+      "github": "https://github.com/johndoe/fitness-tracking-app",
+      "demo": "https://fitness-tracking-app-demo.com"
+    }
+  ],
+  "skills": {
+    "languages": [
+      "JavaScript",
+      "TypeScript",
+      "Swift",
+      "Kotlin",
+      "Java",
+      "Python"
+    ],
+    "frameworks": [
+      "React Native",
+      "React",
+      "SwiftUI",
+      "Express.js",
+      "Next.js",
+      "Redux"
+    ],
+    "tools": ["Git", "Xcode", "Android Studio", "VS Code", "Firebase", "AWS"],
+    "databases": ["SQLite", "PostgreSQL", "MongoDB"]
+  },
+  "blog": {
+    "title": "Blog",
+    "posts": [
+      {
+        "title": "Building Performant React Native Apps",
+        "excerpt": "Learn the best practices for optimizing React Native performance...",
+        "date": "2024-03-15"
+      },
+      {
+        "title": "The Future of Mobile Development",
+        "excerpt": "Exploring upcoming trends in mobile app development...",
+        "date": "2024-03-10"
+      },
+      {
+        "title": "Native vs Cross-Platform Development",
+        "excerpt": "A comprehensive comparison of development approaches...",
+        "date": "2024-03-05"
+      }
+    ]
+  },
+  "links": [
+    {
+      "title": "GitHub",
+      "url": "https://github.com/johndoe",
+      "icon": "github"
+    },
+    {
+      "title": "Twitter",
+      "url": "https://twitter.com/johndoe",
+      "icon": "twitter"
+    },
+    {
+      "title": "LinkedIn",
+      "url": "https://linkedin.com/in/johndoe",
+      "icon": "linkedin"
+    }
+  ],
+  "contact": {
+    "title": "Let's Build Something Amazing",
+    "description": "Looking for a mobile developer who can bring your ideas to life? Let's talk about your project.",
+    "email": "mailto:contact@example.com"
+  },
+  "footer": {
+    "copyright": "© {year} John Doe. All rights reserved."
+  }
+}

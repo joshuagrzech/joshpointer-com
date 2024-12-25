@@ -1,50 +1,29 @@
 import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Quote } from "lucide-react";
-
-interface Testimonial {
-  content: string;
-  author: string;
-  role: string;
-  company: string;
-}
-
-const testimonials: Testimonial[] = [
-  {
-    content: "An exceptional developer who consistently delivers high-quality work. Their attention to detail and problem-solving skills are outstanding.",
-    author: "Sarah Johnson",
-    role: "CTO",
-    company: "Tech Innovations",
-  },
-  {
-    content: "Working with them was a great experience. They not only delivered the project on time but also provided valuable insights throughout the development process.",
-    author: "Michael Chen",
-    role: "Product Manager",
-    company: "Digital Solutions",
-  },
-  {
-    content: "Their technical expertise and ability to understand complex requirements made our project a success. Highly recommended!",
-    author: "Emily Rodriguez",
-    role: "Engineering Lead",
-    company: "Software Corp",
-  },
-];
+import { useConfig } from "@/contexts/ConfigContext";
 
 export default function TestimonialSection() {
+  const { config, isLoading } = useConfig();
+
+  if (isLoading || !config) {
+    return null;
+  }
+
   return (
     <div className="space-y-8">
       <div className="flex items-center gap-3">
         <Quote className="h-6 w-6 text-primary" />
-        <h2 className="text-2xl font-semibold">Testimonials</h2>
+        <h2 className="text-2xl font-semibold">{config.testimonials.title}</h2>
       </div>
 
       <div className="grid gap-6 md:grid-cols-3">
-        {testimonials.map((testimonial, index) => (
+        {config.testimonials.items.map((testimonial, index) => (
           <motion.div
             key={index}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.2 }}
+            transition={{ ...config.theme.animation.framerMotion.default, delay: index * 0.2 }}
           >
             <Card className="h-full">
               <CardContent className="p-6">

@@ -9,7 +9,7 @@ import About from "@/components/sections/About";
 import Skills from "@/components/sections/Skills";
 import { useNavigation } from "@/hooks/useNavigation";
 import { useWindowSize } from "@/hooks/useWindowSize";
-import { framerMotionConfig } from "@/constants/animations";
+import { useConfig } from "@/contexts/ConfigContext";
 
 const pageTransitionVariants = {
   initial: { opacity: 0, x: 100 },
@@ -20,7 +20,10 @@ const pageTransitionVariants = {
 export default function ContentView() {
   const { currentRoute, isReady } = useNavigation();
   const { width, height } = useWindowSize();
+  const { config, isLoading } = useConfig();
   const isPortrait = height > width;
+
+  if (!isReady || isPortrait || isLoading || !config) return null;
 
   const getComponent = () => {
     switch (currentRoute) {
@@ -43,21 +46,19 @@ export default function ContentView() {
     }
   };
 
-  if (!isReady || isPortrait) return null;
-
   return (
     <div>
-        <motion.div
-          key={currentRoute}
-          variants={pageTransitionVariants}
-          initial="initial"
-          animate="animate"
-          exit="exit"
-          transition={framerMotionConfig.default}
-          className="h-full p-8"
-        >
-          {getComponent()}
-        </motion.div>
+      <motion.div
+        key={currentRoute}
+        variants={pageTransitionVariants}
+        initial="initial"
+        animate="animate"
+        exit="exit"
+        transition={config.theme.animation.framerMotion.default}
+        className="h-full p-8"
+      >
+        {getComponent()}
+      </motion.div>
     </div>
   );
 }

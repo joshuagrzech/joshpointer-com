@@ -3,7 +3,7 @@
 export interface NavItem {
   id: string;
   label: string;
-  icon: IconType;
+  icon: string;
 }
 
 export type IconType =
@@ -59,4 +59,5 @@ export type Route =
   | "skills"
   | "contact"
   | "blog"
-  | "links";
+  | "links"
+  | "admin"

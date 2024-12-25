@@ -16,6 +16,7 @@ import { useThree } from "@react-three/fiber";
 import { useNavigation } from "@/hooks/useNavigation";
 import PhoneScreen from "./PhoneScreen";
 import { reactSpringConfig } from "@/constants/animations";
+import { ConfigProvider } from "@/contexts/ConfigContext";
 
 interface FloatingPhoneProps {
   mousePosition: { x: number; y: number };
@@ -33,7 +34,6 @@ const PhoneModel = memo(
   }) => {
     const { isReady } = useNavigation();
 
-
     return (
       <animated.group {...modelAnimation}>
         <animated.primitive object={scene} castShadow receiveShadow />
@@ -47,7 +47,9 @@ const PhoneModel = memo(
             distanceFactor={0.413}
             contentEditable={false}
           >
-            <PhoneScreen />
+            <ConfigProvider>
+              <PhoneScreen />
+            </ConfigProvider>
           </Html>
         )}
       </animated.group>

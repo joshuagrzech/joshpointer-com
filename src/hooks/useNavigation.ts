@@ -12,7 +12,8 @@ const routePaths: Record<Route, string> = {
   skills: '/skills',
   contact: '/contact',
   blog: '/blog',
-  links: '/links'
+  links: '/links',
+  admin: '/admin'
 }
 
 const pathToRoute: Record<string, Route> = Object.entries(routePaths).reduce((acc, [route, path]) => ({

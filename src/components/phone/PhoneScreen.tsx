@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
 import React, { useState, useEffect, useCallback } from "react";
-import { fetchConfig } from "@/lib/config";
-import type { Branding, NavItem, Route, SelectedIcon } from "@/types";
+import type { NavItem, Route, SelectedIcon } from "@/types";
 import { OpenApp } from "@/components/phone/OpenApp";
 import HomeScreen from "@/components/phone/HomeScreen";
-import { useNavigation } from '@/hooks/useNavigation';
+import { useNavigation } from "@/hooks/useNavigation";
+import { useTheme } from "next-themes";
 
 interface PhoneScreenProps {
   setBackgroundGradient?: (gradient: [string, string]) => void;
@@ -20,7 +20,10 @@ const calculateIconPosition = (index: number) => ({
   y: Math.floor(index / 4) * (56 + 16) + 160,
 });
 
-export default function PhoneScreen({ setBackgroundGradient }: PhoneScreenProps) {
+export default function PhoneScreen({
+  setBackgroundGradient,
+}: PhoneScreenProps) {
+  const { theme } = useTheme();
   const { navigate, isReady, currentRoute } = useNavigation();
 
   // Combine app-related state
@@ -31,31 +34,19 @@ export default function PhoneScreen({ setBackgroundGradient }: PhoneScreenProps)
     isNavigating: false,
   });
 
-  const [branding, setBranding] = useState<Branding>({
-    name: "",
-    tagline: "",
-  });
-
-  useEffect(() => {
-    const loadConfig = async () => {
-      try {
-        const data = await fetchConfig();
-        setBranding(data.branding);
-      } catch (error) {
-        console.error("Failed to load config:", error);
-      }
-    };
-    loadConfig();
-  }, []);
-
   // Simplified navigation effect
   useEffect(() => {
     if (!isReady || appState.isNavigating) return;
 
-    if (currentRoute === 'home' && appState.isOpen) {
-      setAppState(prev => ({ ...prev, isOpen: false, activeApp: null, selectedIcon: null }));
-    } else if (currentRoute !== 'home' && !appState.isOpen) {
-      setAppState(prev => ({
+    if (currentRoute === "home" && appState.isOpen) {
+      setAppState((prev) => ({
+        ...prev,
+        isOpen: false,
+        activeApp: null,
+        selectedIcon: null,
+      }));
+    } else if (currentRoute !== "home" && !appState.isOpen) {
+      setAppState((prev) => ({
         ...prev,
         selectedIcon: {
           id: currentRoute,
@@ -68,42 +59,45 @@ export default function PhoneScreen({ setBackgroundGradient }: PhoneScreenProps)
     }
   }, [currentRoute, isReady, appState.isOpen, appState.isNavigating]);
 
-  const handleAppClick = useCallback((item: NavItem, index: number) => {
-    if (appState.isNavigating) return;
-    
-    setAppState(prev => ({
-      ...prev,
-      isNavigating: true,
-      selectedIcon: {
-        id: item.id,
-        index,
-        rect: calculateIconPosition(index),
-      },
-      activeApp: item.id,
-      isOpen: true,
-    }));
-    
-    const timer = setTimeout(() => {
-      navigate(item.id as Route);
-      setAppState(prev => ({ ...prev, isNavigating: false }));
-    }, ANIMATION_DURATION);
+  const handleAppClick = useCallback(
+    (item: NavItem, index: number) => {
+      if (appState.isNavigating) return;
 
-    return () => clearTimeout(timer);
-  }, [navigate, appState.isNavigating]);
+      setAppState((prev) => ({
+        ...prev,
+        isNavigating: true,
+        selectedIcon: {
+          id: item.id,
+          index,
+          rect: calculateIconPosition(index),
+        },
+        activeApp: item.id,
+        isOpen: true,
+      }));
+
+      const timer = setTimeout(() => {
+        navigate(item.id as Route);
+        setAppState((prev) => ({ ...prev, isNavigating: false }));
+      }, ANIMATION_DURATION);
+
+      return () => clearTimeout(timer);
+    },
+    [navigate, appState.isNavigating]
+  );
 
   const handleAppClose = useCallback(() => {
     if (appState.isNavigating) return;
-    
-    setAppState(prev => ({ ...prev, isNavigating: true, isOpen: false }));
-    
+
+    setAppState((prev) => ({ ...prev, isNavigating: true, isOpen: false }));
+
     const timer = setTimeout(() => {
-      setAppState(prev => ({
+      setAppState((prev) => ({
         ...prev,
         activeApp: null,
         selectedIcon: null,
         isNavigating: false,
       }));
-      navigate('home');
+      navigate("home");
     }, ANIMATION_DURATION);
 
     return () => clearTimeout(timer);
@@ -112,26 +106,38 @@ export default function PhoneScreen({ setBackgroundGradient }: PhoneScreenProps)
   if (!isReady) return null;
 
   return (
-    <div className={
-
-           "relative w-[748px] h-[1592px] text-white rounded-[108px] shadow-xl border-8 border-transparent overflow-hidden"
-      }>
-        {!appState.isOpen && (
-          <HomeScreen
-            key="home"
-            branding={branding}
-            handleAppClick={handleAppClick}
-            setBackgroundGradient={setBackgroundGradient}
-          />
-        )}
-        {appState.activeApp && (
-          <OpenApp
-            key="app"
-            activeApp={appState.activeApp}
-            handleAppClose={handleAppClose}
-            selectedIcon={appState.selectedIcon!}
-          />
-        )}
+    <div
+      className={
+        "relative w-[748px] h-[1592px] text-white rounded-[108px] shadow-xl border-8 border-border/20 overflow-hidden backdrop-blur-xl transition-colors duration-300"
+      }
+      style={{
+        background: `linear-gradient(to bottom right, ${
+          theme === 'dark' 
+            ? 'rgba(34, 211, 238, 0.15)' // Cyan for dark
+            : 'rgba(34, 211, 238, 0.08)'  // Lighter cyan for light
+        }, ${
+          theme === 'dark'
+            ? 'rgba(79, 70, 229, 0.2)'    // Indigo for dark
+            : 'rgba(79, 70, 229, 0.12)'   // Lighter indigo for light
+        })`,
+        backgroundColor: theme === 'dark' ? 'rgba(0, 0, 0, 0.3)' : 'rgba(255, 255, 255, 0.3)'
+      } as React.CSSProperties}
+    >
+      {!appState.isOpen && (
+        <HomeScreen
+          key="home"
+          handleAppClick={handleAppClick}
+          setBackgroundGradient={setBackgroundGradient}
+        />
+      )}
+      {appState.activeApp && (
+        <OpenApp
+          key="app"
+          activeApp={appState.activeApp}
+          handleAppClose={handleAppClose}
+          selectedIcon={appState.selectedIcon!}
+        />
+      )}
     </div>
   );
 }

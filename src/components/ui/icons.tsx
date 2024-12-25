@@ -11,6 +11,10 @@ import {
   Link,
   type LucideIcon,
   PersonStandingIcon,
+  Lightbulb,
+  Code2,
+  CheckCircle,
+  Rocket,
 } from "lucide-react";
 
 export type IconName =
@@ -27,6 +31,10 @@ export type IconName =
   | "about"
   | "skills"
   | "blog"
+  | "lightbulb"
+  | "code"
+  | "check"
+  | "rocket";
 
 export const IconMap: Record<IconName, LucideIcon> = {
   github: Github,
@@ -41,5 +49,9 @@ export const IconMap: Record<IconName, LucideIcon> = {
   link: Link,
   about: PersonStandingIcon,
   skills: Wrench,
-  blog: Book
+  blog: Book,
+  lightbulb: Lightbulb,
+  code: Code2,
+  check: CheckCircle,
+  rocket: Rocket,
 };

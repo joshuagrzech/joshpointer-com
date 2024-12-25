@@ -5,11 +5,12 @@ import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import FloatingPhone from "@/components/phone/FloatingPhone";
 import { Canvas } from "@react-three/fiber";
 import { Environment, PerspectiveCamera } from "@react-three/drei";
+import { useNavigation } from "@/hooks/useNavigation";
 
 function RootCanvasClientComponent() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const containerRef = useRef<HTMLDivElement>(null);
-
+  const {currentRoute} = useNavigation()
   // Memoize mouse movement handler
   const handleMouseMove = useCallback((event: MouseEvent) => {
     if (!containerRef.current) return;
@@ -51,10 +52,11 @@ function RootCanvasClientComponent() {
       ref={containerRef} 
       className="min-w-max h-screen"
     >
+      {currentRoute !== 'admin' && (
       <Suspense fallback={<LoadingSpinner />}>
         <Canvas
-          gl={{ antialias: true, alpha: true }}
-          dpr={[1, 2] as [number, number]}
+          // gl={{ antialias: true, alpha: true }}
+          // dpr={[1, 2] as [number, number]}
         >
           <Environment preset="city" />
           <PerspectiveCamera makeDefault fov={30} position={[0, 0, 0]} />
@@ -64,6 +66,7 @@ function RootCanvasClientComponent() {
           />
         </Canvas>
       </Suspense>
+      )}
     </div>
   );
 }
