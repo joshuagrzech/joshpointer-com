@@ -1,29 +1,32 @@
-import React from "react";
-import type { AppGridProps } from "@/types";
-import AppIcon from "@/components/phone/AppIcon";
-import { useConfig } from "@/contexts/ConfigContext";
+'use client';
 
-const AppGrid: React.FC<AppGridProps> = ({ handleAppClick }) => {
-  const { config, isLoading } = useConfig();
+import { motion } from "framer-motion";
+import AppIcon from "./AppIcon";
+import { getNavigationConfig } from "@/lib/config";
+import type { Config } from "@/types/config";
+import type { NavItem } from "@/types";
 
-  if (isLoading || !config) {
-    return null;
-  }
+interface AppGridProps {
+  handleAppClick: (item: NavItem, index: number) => void;
+}
+
+export function AppGrid({ handleAppClick }: AppGridProps) {
+  const navigation = getNavigationConfig();
 
   return (
-    <div className="px-16 mt-8">
-      <div className="grid grid-cols-4 gap-8">
-        {config.navigation.map((item, index) => (
-          <AppIcon
-            key={item.id}
-            item={item}
-            index={index}
-            handleAppClick={handleAppClick}
-          />
-        ))}
-      </div>
+    <div className="grid grid-cols-4 gap-6 place-items-center w-full">
+      {navigation.map((item: Config["navigation"][0], index: number) => (
+        <motion.div
+          key={item.id}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: index * 0.1 }}
+          onClick={() => handleAppClick(item as NavItem, index)}
+          className="flex items-center justify-center"
+        >
+          <AppIcon item={item} index={index} handleAppClick={handleAppClick} />
+        </motion.div>
+      ))}
     </div>
   );
-};
-
-export default AppGrid;
+}

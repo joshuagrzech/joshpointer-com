@@ -1,17 +1,24 @@
 import "./globals.css";
 import type { Metadata, Viewport } from "next";
 import { Providers } from "./providers";
-import { ConfigProvider } from "@/contexts/ConfigContext";
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
-import {Config} from "@/contexts/ConfigContext"
+import { getBrandingConfig } from "@/lib/config";
 
 // Dynamic imports with loading states and chunking
 const ScrollProgress = dynamic(
-  () => import("@/components/ui/ScrollProgress"),
+  () =>
+    import("@/components/ui/ScrollProgress").then((mod) => ({
+      default: mod.ScrollProgress,
+    })),
   {
     ssr: false,
-    loading: () => <div className="h-1 bg-gray-200 animate-pulse" />
+    loading: () => (
+      <div
+        className="h-1 bg-gray-200 animate-pulse"
+        aria-label="Loading scroll progress"
+      />
+    ),
   }
 );
 
@@ -20,116 +27,120 @@ const RootCanvasClient = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="fixed inset-0 bg-gradient-to-r from-gray-100 to-gray-200 animate-pulse" />
-    )
+      <div
+        className="fixed inset-0 bg-gradient-to-r from-gray-100 to-gray-200 animate-pulse"
+        aria-label="Loading canvas"
+      />
+    ),
   }
 );
 
 const NavigationSync = dynamic(
   () => import("@/components/layout/NavigationSync"),
-  { 
-    ssr: false,
-    loading: () => null 
-  }
-);
-
-const ThemeToggle = dynamic(
-  () => import("@/components/ui/ThemeToggle"),
   {
     ssr: false,
-    loading: () => <div className="w-10 h-10 rounded-full bg-gray-200 animate-pulse" />
+    loading: () => null,
   }
 );
 
-// Optimized config fetching with edge caching
-const CONFIG_CACHE_TIME = 3600;
-let cachedConfig: Config | null = null;
-let lastFetchTime = 0;
+const ThemeToggle = dynamic(() => import("@/components/ui/ThemeToggle"), {
+  ssr: false,
+  loading: () => (
+    <div
+      className="w-10 h-10 rounded-full bg-gray-200 animate-pulse"
+      aria-label="Loading theme toggle"
+    />
+  ),
+});
 
-async function getConfig() {
-  const now = Date.now();
-  if (cachedConfig && now - lastFetchTime < CONFIG_CACHE_TIME * 1000) {
-    return cachedConfig;
-  }
+// Metadata configuration with improved SEO
+export function generateMetadata(): Metadata {
+  const branding = getBrandingConfig();
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
-  try {
-    const response = await fetch(
-      process.env.NEXT_PUBLIC_BASE_URL + "/config.json",
-      { 
-        next: { 
-          revalidate: CONFIG_CACHE_TIME,
-          tags: ['config']
-        }
-      }
-    );
-    if (!response.ok) throw new Error("Failed to load configuration");
-    cachedConfig = await response.json();
-    lastFetchTime = now;
-    return cachedConfig as Config;
-  } catch (error) {
-    console.error('Config fetch error:', error);
-    return {
-      branding: {
-        metadata: {
-          title: "Portfolio",
-          description: "Developer Portfolio",
-        }
-      }
-    } as Config;
-  }
-}
-
-// Metadata configuration
-export async function generateMetadata(): Promise<Metadata> {
-  const config = await getConfig();
-  
   return {
+    metadataBase: new URL(baseUrl),
     title: {
-      template: `%s | ${config.branding.metadata.title}`,
-      default: config.branding.metadata.title,
+      template: `%s | ${branding.metadata.title}`,
+      default: branding.metadata.title,
     },
-    description: config.branding.metadata.description,
-    manifest: '/manifest.json',
+    description: branding.metadata.description,
+    manifest: "/manifest.json",
+    applicationName: branding.name,
+    keywords: ["portfolio", "developer", "web development"],
+    authors: [{ name: branding.name }],
+    creator: branding.name,
+    publisher: branding.name,
+    formatDetection: {
+      email: false,
+      address: false,
+      telephone: false,
+    },
     icons: {
-      icon: '/favicon.ico',
-      apple: '/apple-touch-icon.png',
+      icon: [
+        { url: "/favicon.ico", sizes: "any" },
+        { url: "/icon.svg", type: "image/svg+xml" },
+      ],
+      apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
     },
     openGraph: {
-      title: config.branding.metadata.title,
-      description: config.branding.metadata.description,
-      type: 'website',
+      title: branding.metadata.title,
+      description: branding.metadata.description,
+      type: "website",
+      siteName: branding.metadata.title,
+      locale: "en_US",
+      url: baseUrl,
     },
     twitter: {
-      card: 'summary_large_image',
-      title: config.branding.metadata.title,
-      description: config.branding.metadata.description,
+      card: "summary_large_image",
+      title: branding.metadata.title,
+      description: branding.metadata.description,
+      creator: "@yourtwitterhandle",
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-video-preview": -1,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
+    },
+    verification: {
+      google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+    },
+    alternates: {
+      canonical: baseUrl,
     },
   };
 }
 
-// Viewport configuration
+// Viewport configuration with improved mobile support
 export const viewport: Viewport = {
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
-    { media: '(prefers-color-scheme: dark)', color: '#000000' },
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#000000" },
   ],
-  width: 'device-width',
+  width: "device-width",
   initialScale: 1,
   maximumScale: 5,
+  userScalable: true,
+  viewportFit: "cover",
+  colorScheme: "light dark",
 };
 
-// Template component for error boundaries
-const ErrorBoundary = ({ children }: { children: React.ReactNode }) => {
-  if (process.env.NODE_ENV === 'development') {
-    return children;
-  }
-
+// Server Component for loading states
+function LoadingFallback() {
   return (
-    <Suspense fallback={null}>
-      {children}
-    </Suspense>
+    <div className="flex items-center justify-center min-h-screen">
+      <div className="animate-pulse" role="status" aria-label="Loading">
+        Loading...
+      </div>
+    </div>
   );
-};
+}
 
 export default function RootLayout({
   children,
@@ -137,79 +148,63 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html 
-      lang="en" 
-      suppressHydrationWarning 
-      className="antialiased"
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className="antialiased scroll-smooth"
     >
       <head />
       <body className="overflow-x-hidden">
-        <ErrorBoundary>
-          <ConfigProvider>
-            <Providers>
-              {/* Navigation and UI Elements */}
-              <Suspense fallback={null}>
-                <NavigationSync />
-              </Suspense>
-              
-              <Suspense fallback={<div className="h-1 bg-gray-200 animate-pulse" />}>
-                <ScrollProgress />
-              </Suspense>
-              
-              <Suspense fallback={<div className="w-10 h-10 rounded-full bg-gray-200 animate-pulse" />}>
-                <ThemeToggle />
-              </Suspense>
+        <Suspense fallback={<LoadingFallback />}>
+          <Providers>
+            {/* Navigation and UI Elements with improved loading states */}
+            <Suspense fallback={null}>
+              <NavigationSync />
+            </Suspense>
 
-              <main className="relative w-full h-screen">
-                {/* Content overlay with performance optimizations */}
-                <div 
-                  className="pointer-events-none absolute top-0 right-0 w-full h-full"
-                  style={{ 
-                    willChange: 'transform',
-                    transform: 'translateZ(0)',
-                    backfaceVisibility: 'hidden'
-                  }}
+            <Suspense
+              fallback={
+                <div
+                  className="h-1 bg-gray-200 animate-pulse"
+                  role="progressbar"
+                />
+              }
+            >
+              <ScrollProgress />
+            </Suspense>
+
+            <Suspense
+              fallback={
+                <div
+                  className="w-10 h-10 rounded-full bg-gray-200 animate-pulse"
+                  role="status"
+                />
+              }
+            >
+              <ThemeToggle />
+            </Suspense>
+
+            <main className="relative w-full h-screen">
+              {/* Full screen canvas with GPU acceleration */}
+              <div
+                className="fixed inset-0 w-full h-full"
+                style={{ zIndex: 0 }}
+              >
+                <Suspense
+                  fallback={
+                    <div
+                      className="w-full h-full bg-gradient-to-r from-gray-100 to-gray-200 animate-pulse"
+                      role="status"
+                      aria-label="Loading canvas"
+                    />
+                  }
                 >
-                  <div
-                    style={{ 
-                      marginLeft: "50vw",
-                      willChange: 'transform',
-                      transform: 'translateZ(0)',
-                      backfaceVisibility: 'hidden'
-                    }}
-                    className="pointer-events-auto w-1/2 md:w-1/2 hidden md:block scroll-smooth"
-                  >
-                    <Suspense fallback={
-                      <div className="w-full h-full bg-gradient-to-r from-gray-100 to-gray-200 animate-pulse" />
-                    }>
-                      {children}
-                    </Suspense>
-                  </div>
-                </div>
-
-                {/* Full screen canvas with optimizations */}
-                <div 
-                  className="fixed inset-0 w-full h-full"
-                  style={{ 
-                    willChange: 'transform',
-                    transform: 'translateZ(0)',
-                    backfaceVisibility: 'hidden',
-                    containIntrinsicSize: '100vh',
-                    contain: 'paint'
-                  }}
-                >
-                  <Suspense fallback={
-                    <div className="w-full h-full bg-gradient-to-r from-gray-100 to-gray-200 animate-pulse" />
-                  }>
-                    <RootCanvasClient />
-                  </Suspense>
-                </div>
-              </main>
-            </Providers>
-          </ConfigProvider>
-        </ErrorBoundary>
-
-    
+                  <RootCanvasClient>{children}</RootCanvasClient>
+                </Suspense>
+              </div>
+            </main>
+          </Providers>
+        </Suspense>
       </body>
     </html>
   );

@@ -13,7 +13,7 @@ const StatusBar: React.FC = () => {
   }, []);
 
   return (
-    <div className="fixed flex flex-row top-0 left-0 w-full justify-between items-center px-16 py-10 text-3xl font-extrabold text-white">
+    <div className="relative flex flex-row top-0 left-0 w-full justify-between items-center px-16 py-10 text-3xl font-extrabold text-white">
       <span className="pl-2 pt-2">{time}</span>
       <div className="flex items-center gap-4 ">
         <SignalLowIcon size={42} />

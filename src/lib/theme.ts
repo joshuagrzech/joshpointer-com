@@ -1,40 +1,51 @@
-import type { Config } from "@/contexts/ConfigContext";
+import { getThemeConfig } from "./config";
+import type { FontConfig } from "@/types/config";
 
-export function initializeTheme(config: Config) {
+export function initializeTheme() {
+  const theme = getThemeConfig();
   const root = document.documentElement;
   const isDark = document.documentElement.classList.contains('dark');
-  const colors = isDark ? config.theme.colors.dark : config.theme.colors.light;
+  const colors = isDark ? theme.colors.dark : theme.colors.light;
 
   // Set color variables
   Object.entries(colors).forEach(([key, value]) => {
-    root.style.setProperty(`--${key}`, value);
+    if (typeof value === 'string') {
+      root.style.setProperty(`--${key}`, value);
+    }
   });
 
   // Set chart colors
-  Object.entries(config.theme.colors.chart).forEach(([key, value]) => {
-    root.style.setProperty(`--chart-${key}`, value);
+  Object.entries(theme.colors.chart).forEach(([key, value]) => {
+    if (typeof value === 'string') {
+      root.style.setProperty(`--chart-${key}`, value);
+    }
   });
 
   // Set radius
-  Object.entries(config.theme.radius).forEach(([key, value]) => {
-    if (key === 'default') {
-      root.style.setProperty('--radius', value);
-    } else {
-      root.style.setProperty(`--radius-${key}`, value);
+  Object.entries(theme.radius).forEach(([key, value]) => {
+    if (typeof value === 'string') {
+      if (key === 'default') {
+        root.style.setProperty('--radius', value);
+      } else {
+        root.style.setProperty(`--radius-${key}`, value);
+      }
     }
   });
 }
 
-export function updateThemeMode(config: Config, isDark: boolean) {
+export function updateThemeMode(isDark: boolean) {
+  const theme = getThemeConfig();
   const root = document.documentElement;
-  const colors = isDark ? config.theme.colors.dark : config.theme.colors.light;
+  const colors = isDark ? theme.colors.dark : theme.colors.light;
 
   Object.entries(colors).forEach(([key, value]) => {
-    root.style.setProperty(`--${key}`, value);
+    if (typeof value === 'string') {
+      root.style.setProperty(`--${key}`, value);
+    }
   });
 }
 
-export function loadFonts(fonts: Array<{ family: string; url: string; weight?: number; style?: string }>) {
+export function loadFonts(fonts: FontConfig[]) {
   const fontFaces = fonts.map(({ family, url, weight = 400, style = 'normal' }) => {
     return `@font-face {
       font-family: '${family}';

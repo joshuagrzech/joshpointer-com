@@ -4,33 +4,12 @@ import { Badge } from "@/components/ui/badge";
 import ScrollReveal from "@/components/ui/ScrollReveal";
 import { Github, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
-interface Project {
-  title: string;
-  description: string;
-  technologies: string[];
-  github?: string;
-  demo?: string;
-}
-
-const projects: Project[] = [
-  {
-    title: "Project One",
-    description: "A full-stack web application built with modern technologies.",
-    technologies: ["React", "Node.js", "TypeScript", "PostgreSQL"],
-    github: "https://github.com/username/project-one",
-    demo: "https://project-one.demo",
-  },
-  {
-    title: "Project Two",
-    description: "A mobile-first responsive web application.",
-    technologies: ["Next.js", "TailwindCSS", "Prisma", "MongoDB"],
-    github: "https://github.com/username/project-two",
-  },
-  // Add more projects as needed
-];
+import { getProjectsConfig } from "@/lib/config";
+import type { Config } from "@/types/config";
 
 export default function Projects() {
+  const projects = getProjectsConfig();
+
   return (
     <div className="space-y-8">
       <ScrollReveal>
@@ -39,45 +18,54 @@ export default function Projects() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <h1 className="text-4xl font-bold mb-4">Projects</h1>
+          <h1 className="text-4xl font-bold mb-4">{projects.title}</h1>
           <p className="text-lg text-muted-foreground mb-8">
-            Here are some of the projects I&apos;ve worked on. Each one represents a unique challenge
-            and learning experience.
+            {projects.description}
           </p>
         </motion.div>
       </ScrollReveal>
 
       <div className="grid gap-6 md:grid-cols-2">
-        {projects.map((project) => (
+        {projects.items.map((project: Config["projects"]["items"][0]) => (
           <ScrollReveal key={project.title}>
             <Card>
               <CardContent className="p-6">
-                <h2 className="text-2xl font-semibold mb-2">{project.title}</h2>
-                <p className="text-muted-foreground mb-4">{project.description}</p>
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {project.technologies.map((tech) => (
-                    <Badge key={tech} variant="secondary">
-                      {tech}
-                    </Badge>
-                  ))}
-                </div>
-                <div className="flex gap-2">
-                  {project.github && (
-                    <Button variant="outline" size="sm" asChild>
-                      <a href={project.github} target="_blank" rel="noopener noreferrer">
-                        <Github className="mr-2 h-4 w-4" />
-                        Code
-                      </a>
-                    </Button>
-                  )}
-                  {project.demo && (
-                    <Button variant="outline" size="sm" asChild>
-                      <a href={project.demo} target="_blank" rel="noopener noreferrer">
-                        <ExternalLink className="mr-2 h-4 w-4" />
-                        Demo
-                      </a>
-                    </Button>
-                  )}
+                <div className="flex flex-col space-y-4">
+                  <div className="flex items-center justify-between">
+                    <h2 className="text-2xl font-semibold">{project.title}</h2>
+                    <div className="flex gap-2">
+                      {project.github && (
+                        <Button variant="ghost" size="icon" asChild>
+                          <a
+                            href={project.github}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <Github className="h-5 w-5" />
+                          </a>
+                        </Button>
+                      )}
+                      {project.url && (
+                        <Button variant="ghost" size="icon" asChild>
+                          <a
+                            href={project.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <ExternalLink className="h-5 w-5" />
+                          </a>
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                  <p className="text-muted-foreground">{project.description}</p>
+                  <div className="flex flex-wrap gap-2">
+                    {project.tags.map((tag: string) => (
+                      <Badge key={tag} variant="secondary">
+                        {tag}
+                      </Badge>
+                    ))}
+                  </div>
                 </div>
               </CardContent>
             </Card>

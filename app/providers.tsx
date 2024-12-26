@@ -2,61 +2,53 @@
 
 import { ThemeProvider } from "next-themes";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { useConfig } from "@/contexts/ConfigContext";
-import { useEffect } from "react";
-import { initializeTheme, updateThemeMode, loadFonts, applyFontVariables } from "@/lib/theme";
+import { useEffect, useCallback, memo } from "react";
+import { getThemeConfig } from "@/lib/config";
+import { initializeTheme, updateThemeMode, loadFonts } from "@/lib/theme";
 
-export function Providers({ children }: { children: React.ReactNode }) {
-  const { config, isLoading } = useConfig();
-
-  useEffect(() => {
-    if (!isLoading && config) {
-      initializeTheme(config);
-
-      if (config.theme.fonts?.custom) {
-        loadFonts(config.theme.fonts.custom);
+// Memoized theme observer component for better performance
+const ThemeObserver = memo(() => {
+  const theme = getThemeConfig();
+  
+  const handleThemeChange = useCallback((mutations: MutationRecord[]) => {
+    mutations.forEach((mutation) => {
+      if (
+        mutation.type === 'attributes' &&
+        mutation.attributeName === 'class'
+      ) {
+        const isDark = document.documentElement.classList.contains('dark');
+        updateThemeMode(isDark);
       }
-
-      if (config.theme.fonts?.variables) {
-        applyFontVariables(config.theme.fonts.variables);
-      }
-    }
-  }, [config, isLoading]);
-
-  useEffect(() => {
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        if (
-          mutation.type === 'attributes' &&
-          mutation.attributeName === 'class' &&
-          config
-        ) {
-          const isDark = document.documentElement.classList.contains('dark');
-          updateThemeMode(config, isDark);
-        }
-      });
     });
+  }, []);
+
+  useEffect(() => {
+    const observer = new MutationObserver(handleThemeChange);
 
     observer.observe(document.documentElement, {
       attributes: true,
       attributeFilter: ['class'],
     });
 
+    // Initialize theme and fonts
+    initializeTheme();
+    if (theme.fonts.custom.length > 0) {
+      loadFonts(theme.fonts.custom);
+    }
+
     return () => observer.disconnect();
-  }, [config]);
+  }, [handleThemeChange]);
 
-  if (isLoading || !config) {
-    return null;
-  }
+  return null;
+});
 
+ThemeObserver.displayName = 'ThemeObserver';
+
+export function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <ThemeProvider
-      attribute="class"
-      defaultTheme="system"
-      enableSystem
-      disableTransitionOnChange
-    >
+    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
       <TooltipProvider>
+        <ThemeObserver />
         {children}
       </TooltipProvider>
     </ThemeProvider>

@@ -2,7 +2,6 @@ import React from "react";
 import { motion } from "framer-motion";
 import { IconMap } from "@/components/ui/icons";
 import type { NavItem } from "@/types";
-import { useConfig } from "@/contexts/ConfigContext";
 import { useTheme } from "next-themes";
 
 interface AppIconProps {
@@ -16,11 +15,8 @@ const AppIcon: React.FC<AppIconProps> = ({
   index,
   handleAppClick,
 }) => {
-  const { config, isLoading } = useConfig();
   const {theme} = useTheme()
-  if (isLoading || !config) {
-    return null;
-  }
+
 
   const Icon = IconMap[item.icon as keyof typeof IconMap];
 
@@ -30,7 +26,6 @@ const AppIcon: React.FC<AppIconProps> = ({
       className="flex flex-col items-center justify-center cursor-pointer"
       whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 0.95 }}
-      transition={config.theme.animation.framerMotion.default}
     >
       <div 
         className="w-28 h-28 rounded-2xl flex items-center justify-center transition-colors duration-300"

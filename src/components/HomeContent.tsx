@@ -1,37 +1,25 @@
-import React from "react";
-import { useConfig } from "@/contexts/ConfigContext";
+'use client';
+
 import { motion } from "framer-motion";
-import { Card, CardContent } from "@/components/ui/card";
+import { getBrandingConfig } from "@/lib/config";
 
-export const HomeContent = () => {
-  const { config, isLoading } = useConfig();
-
-  if (isLoading || !config) {
-    return null;
-  }
-
-  const { hero } = config;
+export function HomeContent() {
+  const branding = getBrandingConfig();
 
   return (
-    <div className="h-full w-full p-8">
+    <div className="h-full w-full flex flex-col items-center justify-center p-4 text-center">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={config.theme.animation.framerMotion.default}
+        transition={{ duration: 0.5 }}
+        className="space-y-4"
       >
-        <Card>
-          <CardContent className="p-8">
-            <h1 className="text-4xl font-bold mb-4">{hero.title}</h1>
-            <p className="text-xl text-muted-foreground mb-8">{hero.description}</p>
-            <a
-              href={hero.cta.url}
-              className="inline-block bg-primary text-primary-foreground px-6 py-3 rounded-lg hover:bg-primary/90 transition-colors"
-            >
-              {hero.cta.label}
-            </a>
-          </CardContent>
-        </Card>
+        <h1 className="text-4xl font-bold">{branding.name}</h1>
+        <p className="text-xl text-muted-foreground">{branding.tagline}</p>
+        <p className="text-muted-foreground max-w-lg mx-auto">
+          {branding.description}
+        </p>
       </motion.div>
     </div>
   );
-};
+}

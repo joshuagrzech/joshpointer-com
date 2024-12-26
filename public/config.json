@@ -179,11 +179,7 @@
   ],
   "hero": {
     "title": "Mobile Software Engineer",
-    "description": "Crafting exceptional mobile experiences with React Native & iOS. I bring ideas to life through intuitive and performant mobile applications.",
-    "cta": {
-      "label": "View Projects",
-      "url": "#projects"
-    }
+    "subtitle": "Crafting exceptional mobile experiences with React Native & iOS. I bring ideas to life through intuitive and performant mobile applications."
   },
   "about": {
     "title": "About Me",
@@ -237,69 +233,60 @@
       }
     ]
   },
-  "projects": [
-    {
-      "title": "E-commerce App",
-      "description": "A full-featured mobile commerce platform built with React Native and TypeScript, featuring Redux for state management and Stripe for payments.",
-      "tech": "React Native, TypeScript, Redux, Stripe",
-      "image": "/project1.png",
-      "github": "https://github.com/johndoe/ecommerce-app",
-      "demo": "https://ecommerce-app-demo.com"
-    },
-    {
-      "title": "Social Media Platform",
-      "description": "Native iOS social networking app developed using Swift and SwiftUI, integrated with Firebase for real-time updates and cloud storage.",
-      "tech": "Swift, SwiftUI, Firebase",
-      "image": "/project2.png",
-      "github": "https://github.com/johndoe/social-media-app",
-      "demo": "https://social-media-app-demo.com"
-    },
-    {
-      "title": "Fitness Tracking App",
-      "description": "Cross-platform fitness application with real-time workout tracking, social features, and cloud sync using AWS AppSync.",
-      "tech": "React Native, GraphQL, AWS",
-      "image": "/project3.png",
-      "github": "https://github.com/johndoe/fitness-tracking-app",
-      "demo": "https://fitness-tracking-app-demo.com"
-    }
-  ],
+  "projects": {
+    "title": "Featured Projects",
+    "description": "Here are some of the projects I've worked on. Each one represents a unique challenge and learning experience.",
+    "items": [
+      {
+        "title": "E-commerce App",
+        "description": "A full-featured mobile commerce platform built with React Native and TypeScript, featuring Redux for state management and Stripe for payments.",
+        "tags": ["React Native", "TypeScript", "Redux", "Stripe"],
+        "github": "https://github.com/johndoe/ecommerce-app",
+        "url": "https://ecommerce-app-demo.com"
+      },
+      {
+        "title": "Social Media Platform",
+        "description": "A social networking app with real-time chat, media sharing, and user engagement features.",
+        "tags": ["React Native", "Firebase", "WebRTC", "Redux"],
+        "github": "https://github.com/johndoe/social-media-app",
+        "url": "https://social-media-app-demo.com"
+      }
+    ]
+  },
   "skills": {
-    "languages": [
-      "JavaScript",
-      "TypeScript",
-      "Swift",
-      "Kotlin",
-      "Java",
-      "Python"
-    ],
-    "frameworks": [
-      "React Native",
-      "React",
-      "SwiftUI",
-      "Express.js",
-      "Next.js",
-      "Redux"
-    ],
-    "tools": ["Git", "Xcode", "Android Studio", "VS Code", "Firebase", "AWS"],
-    "databases": ["SQLite", "PostgreSQL", "MongoDB"]
+    "title": "Technical Skills",
+    "description": "Here's an overview of my technical skills and expertise across different areas of software development.",
+    "categories": [
+      {
+        "name": "Frontend Development",
+        "items": ["React Native", "iOS (Swift/SwiftUI)", "React.js", "TypeScript", "JavaScript"]
+      },
+      {
+        "name": "Backend Development",
+        "items": ["Node.js", "Express", "Python", "RESTful APIs", "GraphQL"]
+      },
+      {
+        "name": "Database & Storage",
+        "items": ["MongoDB", "PostgreSQL", "Firebase", "Redis", "AWS S3"]
+      },
+      {
+        "name": "DevOps & Tools",
+        "items": ["Git", "CI/CD", "Docker", "AWS", "Jira"]
+      }
+    ]
   },
   "blog": {
-    "title": "Blog",
+    "title": "Latest Articles",
     "posts": [
       {
-        "title": "Building Performant React Native Apps",
-        "excerpt": "Learn the best practices for optimizing React Native performance...",
-        "date": "2024-03-15"
+        "title": "Building Modern Web Applications with Next.js 13",
+        "excerpt": "Learn how to leverage the latest features in Next.js 13 to build fast, modern web applications with great user experience.",
+        "date": "2023-12-15"
       },
       {
-        "title": "The Future of Mobile Development",
-        "excerpt": "Exploring upcoming trends in mobile app development...",
-        "date": "2024-03-10"
-      },
-      {
-        "title": "Native vs Cross-Platform Development",
-        "excerpt": "A comprehensive comparison of development approaches...",
-        "date": "2024-03-05"
+        "title": "Understanding TypeScript's Type System",
+        "excerpt": "A deep dive into TypeScript's type system and how it can help you write more maintainable code.",
+        "date": "2023-12-10"
       }
     ]
   },
@@ -310,22 +297,27 @@
       "icon": "github"
     },
     {
+      "title": "LinkedIn",
+      "url": "https://linkedin.com/in/johndoe",
+      "icon": "linkedin"
+    },
+    {
       "title": "Twitter",
       "url": "https://twitter.com/johndoe",
       "icon": "twitter"
     },
     {
-      "title": "LinkedIn",
-      "url": "https://linkedin.com/in/johndoe",
-      "icon": "linkedin"
+      "title": "Email",
+      "url": "mailto:john@example.com",
+      "icon": "mail"
     }
   ],
   "contact": {
-    "title": "Let's Build Something Amazing",
-    "description": "Looking for a mobile developer who can bring your ideas to life? Let's talk about your project.",
-    "email": "mailto:contact@example.com"
+    "title": "Get in Touch",
+    "description": "I'm always interested in hearing about new projects and opportunities. Feel free to reach out!",
+    "email": "john@example.com"
   },
   "footer": {
-    "copyright": "© {year} John Doe. All rights reserved."
+    "text": "© 2024 Josh Pointer. All rights reserved."
   }
 }

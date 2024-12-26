@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { motion, useScroll, useSpring } from "framer-motion";
 
-export default function ScrollProgress() {
+export function ScrollProgress() {
   const [isVisible, setIsVisible] = useState(false);
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {

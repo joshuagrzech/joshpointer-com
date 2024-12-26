@@ -1,36 +1,28 @@
-import React from "react";
+'use client';
+
 import { motion } from "framer-motion";
-import StatusBar from "@/components/phone/StatusBar";
-import AppGrid from "@/components/phone/AppGrid";
-import Widget from "@/components/phone/Widget";
-import { useConfig } from "@/contexts/ConfigContext";
-import type { AppGridProps } from "@/types";
+import { AppGrid } from "./AppGrid";
+import { Widget } from "./Widget";
+import type { NavItem } from "@/types";
+import StatusBar from "./StatusBar";
 
-const HomeScreen: React.FC<AppGridProps> = ({ handleAppClick, setBackgroundGradient }) => {
-  const { config, isLoading } = useConfig();
+interface HomeScreenProps {
+  handleAppClick: (item: NavItem, index: number) => void;
+}
 
-  if (isLoading || !config) {
-    return null;
-  }
-
-  const { framerMotion } = config.theme.animation;
+export function HomeScreen({ handleAppClick }: HomeScreenProps) {
 
   return (
     <motion.div
-      key="home"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={framerMotion.default}
-      className="min-h-screen text-foreground transition-colors duration-300"
+      transition={{ duration: 0.3 }}
+      className="relative h-full w-full flex flex-col gap-4 items-center px-6 pt-4"
     >
-      <div className="relative z-10">
-        <StatusBar />
-        <Widget />
-        <AppGrid handleAppClick={handleAppClick} setBackgroundGradient={setBackgroundGradient} />
-      </div>
+        <div className="w-full max-w-[90%] flex flex-col gap-8">
+            <Widget />
+            <AppGrid handleAppClick={handleAppClick} />
+        </div>
     </motion.div>
   );
-};
-
-export default HomeScreen;
+}

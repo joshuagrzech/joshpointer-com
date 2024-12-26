@@ -1,9 +1,7 @@
-"use client";
-import React, { createContext, useContext, useEffect, useState } from 'react';
 import type { IconName } from '@/components/ui/icons';
 
 // Animation types
-interface FramerMotionConfig {
+export interface FramerMotionConfig {
   duration?: number;
   ease?: number[];
   type?: string;
@@ -12,7 +10,7 @@ interface FramerMotionConfig {
   delay?: number;
 }
 
-interface ReactSpringConfig {
+export interface ReactSpringConfig {
   mass?: number;
   tension?: number;
   friction?: number;
@@ -20,27 +18,26 @@ interface ReactSpringConfig {
   delay?: number;
 }
 
-interface FontConfig {
+export interface FontConfig {
   family: string;
   url: string;
   weight?: number;
   style?: string;
 }
 
-interface ProcessStep {
+export interface ProcessStep {
   title: string;
   description: string;
   icon: IconName;
 }
 
-interface Testimonial {
+export interface Testimonial {
   content: string;
   author: string;
   role: string;
   company: string;
 }
 
-// Define the configuration type based on our config.json structure
 export interface Config {
   theme: {
     colors: {
@@ -95,11 +92,7 @@ export interface Config {
   }>;
   hero: {
     title: string;
-    description: string;
-    cta: {
-      label: string;
-      url: string;
-    };
+    subtitle: string;
   };
   about: {
     title: string;
@@ -113,19 +106,24 @@ export interface Config {
     title: string;
     items: Testimonial[];
   };
-  projects: Array<{
+  projects: {
     title: string;
     description: string;
-    tech: string;
-    image: string;
-    github: string;
-    demo: string;
-  }>;
+    items: Array<{
+      title: string;
+      description: string;
+      tags: string[];
+      github?: string;
+      url?: string;
+    }>;
+  };
   skills: {
-    languages: string[];
-    frameworks: string[];
-    tools: string[];
-    databases: string[];
+    title: string;
+    description: string;
+    categories: Array<{
+      name: string;
+      items: string[];
+    }>;
   };
   blog: {
     title: string;
@@ -146,65 +144,6 @@ export interface Config {
     email: string;
   };
   footer: {
-    copyright: string;
+    text: string;
   };
-}
-
-interface ConfigContextType {
-  config: Config | null;
-  isLoading: boolean;
-  error: Error | null;
-}
-
-const ConfigContext = createContext<ConfigContextType | undefined>(undefined);
-
-export function ConfigProvider({ children }: { children: React.ReactNode }) {
-  const [state, setState] = useState<ConfigContextType>({
-    config: null,
-    isLoading: true,
-    error: null,
-  });
-
-  useEffect(() => {
-    let mounted = true;
-    
-    async function loadConfig() {
-      try {
-        const response = await fetch('/config.json');
-        if (!response.ok) {
-          throw new Error('Failed to load configuration');
-        }
-        const config = await response.json();
-        if (mounted) {
-          setState({ config, isLoading: false, error: null });
-        }
-      } catch (error) {
-        console.error('Error loading config:', error);
-        if (mounted) {
-          setState({ config: null, isLoading: false, error: error as Error });
-        }
-      }
-    }
-
-    loadConfig();
-    return () => {
-      mounted = false;
-    };
-  }, []);
-
-  const value = React.useMemo(() => state, [state]);
-
-  return (
-    <ConfigContext.Provider value={value}>
-      {children}
-    </ConfigContext.Provider>
-  );
-}
-
-export function useConfig() {
-  const context = useContext(ConfigContext);
-  if (context === undefined) {
-    throw new Error('useConfig must be used within a ConfigProvider');
-  }
-  return context;
 } 

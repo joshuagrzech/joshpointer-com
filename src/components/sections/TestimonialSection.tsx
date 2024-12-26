@@ -1,29 +1,26 @@
 import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Quote } from "lucide-react";
-import { useConfig } from "@/contexts/ConfigContext";
+import { getTestimonialsConfig } from "@/lib/config";
+import type { Config } from "@/types/config";
 
 export default function TestimonialSection() {
-  const { config, isLoading } = useConfig();
-
-  if (isLoading || !config) {
-    return null;
-  }
+  const testimonials = getTestimonialsConfig();
 
   return (
     <div className="space-y-8">
       <div className="flex items-center gap-3">
         <Quote className="h-6 w-6 text-primary" />
-        <h2 className="text-2xl font-semibold">{config.testimonials.title}</h2>
+        <h2 className="text-2xl font-semibold">{testimonials.title}</h2>
       </div>
 
       <div className="grid gap-6 md:grid-cols-3">
-        {config.testimonials.items.map((testimonial, index) => (
+        {testimonials.items.map((testimonial: Config["testimonials"]["items"][0], index: number) => (
           <motion.div
             key={index}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ ...config.theme.animation.framerMotion.default, delay: index * 0.2 }}
+            transition={{ duration: 0.3, delay: index * 0.2 }}
           >
             <Card className="h-full">
               <CardContent className="p-6">

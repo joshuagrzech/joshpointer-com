@@ -5,18 +5,11 @@ import ExperienceTimeline from "@/components/sections/ExperienceTimeline";
 import ProcessSection from "@/components/sections/ProcessSection";
 import TestimonialSection from "@/components/sections/TestimonialSection";
 import ScrollReveal from "@/components/ui/ScrollReveal";
+import { getSkillsConfig, getAboutConfig } from "@/lib/config";
 
 export default function About() {
-  const skills = [
-    "TypeScript",
-    "React",
-    "Next.js",
-    "Node.js",
-    "Python",
-    "AWS",
-    "Docker",
-    "GraphQL",
-  ];
+  const skills = getSkillsConfig();
+  const about = getAboutConfig();
 
   return (
     <div className="space-y-8">
@@ -26,18 +19,16 @@ export default function About() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <h1 className="text-4xl font-bold mb-4">About Me</h1>
+          <h1 className="text-4xl font-bold mb-4">{about.title}</h1>
           <Card>
             <CardContent className="pt-6">
               <p className="text-lg text-muted-foreground mb-4">
-                I&apos;m a passionate software engineer with a focus on building scalable web applications
-                and solving complex problems. With years of experience in full-stack development,
-                I bring ideas to life through clean, efficient code.
+                {about.content}
               </p>
               <div className="flex flex-wrap gap-2">
-                {skills.map((skill) => (
-                  <Badge key={skill} variant="secondary">
-                    {skill}
+                {skills.categories.map((skill) => (
+                  <Badge key={skill.name} variant="secondary">
+                    {skill.name}
                   </Badge>
                 ))}
               </div>
