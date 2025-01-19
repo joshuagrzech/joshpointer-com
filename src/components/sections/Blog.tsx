@@ -1,11 +1,10 @@
-import { motion } from "framer-motion";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import ScrollReveal from "@/components/ui/ScrollReveal";
-import { Calendar, Clock, ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { getBlogConfig } from "@/lib/config";
-import type { Config } from "@/types/config";
+import { motion } from 'framer-motion';
+import { Card, CardContent } from '@/components/ui/card';
+import ScrollReveal from '@/components/ui/ScrollReveal';
+import { Calendar, ArrowRight } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { getBlogConfig } from '@/lib/config';
+import type { Config } from '@/types/config';
 
 export default function Blog() {
   const blog = getBlogConfig();
@@ -26,7 +25,7 @@ export default function Blog() {
       </ScrollReveal>
 
       <div className="grid gap-6">
-        {blog.posts.map((post: Config["blog"]["posts"][0]) => (
+        {blog.posts.map((post: Config['blog']['posts'][0]) => (
           <ScrollReveal key={post.title}>
             <Card>
               <CardContent className="p-6">

@@ -1,10 +1,9 @@
-"use client";
+'use client';
 
-import React, { useEffect, useMemo, useRef } from "react";
-import { Html, useGLTF } from "@react-three/drei";
-import { Mesh, Box3, Vector3, Group, Object3D } from "three";
-import PhoneScreen from "./PhoneScreen";
-import { Providers } from "../../../app/providers";
+import React, { useEffect, useMemo, useRef, useCallback } from 'react';
+import { Html, useGLTF } from '@react-three/drei';
+import { Mesh, Box3, Vector3, Group, Object3D } from 'three';
+import PhoneScreen from './PhoneScreen';
 
 interface NodeStructure {
   node: Object3D;
@@ -13,29 +12,26 @@ interface NodeStructure {
 
 export default function PhoneModel() {
   const groupRef = useRef<Group>(null);
-  const { scene } = useGLTF("/iphone.glb");
+  const { scene } = useGLTF('/iphone.glb');
 
   // Recursively traverse nodes and build a hierarchy
-  const buildNodeHierarchy = (node: Object3D): NodeStructure => {
+  const buildNodeHierarchy = useCallback((node: Object3D): NodeStructure => {
     const children: NodeStructure[] = [];
     node.children.forEach((child) => {
       children.push(buildNodeHierarchy(child));
     });
     return { node, children };
-  };
+  }, []);
 
   const nodeHierarchy = useMemo(() => {
     if (!scene) return null;
     return buildNodeHierarchy(scene);
-  }, [scene]);
+  }, [scene, buildNodeHierarchy]);
 
   // Locate the specific "screen" mesh by traversing the hierarchy
-  const findScreenMesh = (hierarchy: NodeStructure): Mesh | null => {
-    if (
-      hierarchy.node instanceof Mesh &&
-      hierarchy.node.material.name === "screen.001"
-    ) {
-      hierarchy.node.material.color.set("#000000");
+  const findScreenMesh = useCallback((hierarchy: NodeStructure): Mesh | null => {
+    if (hierarchy.node instanceof Mesh && hierarchy.node.material.name === 'screen.001') {
+      hierarchy.node.material.color.set('#000000');
       hierarchy.node.material.metalness = 0;
       hierarchy.node.material.reflectivity = 1;
       hierarchy.node.material.clearcoat = 1;
@@ -51,12 +47,12 @@ export default function PhoneModel() {
       if (found) return found;
     }
     return null;
-  };
+  }, []);
 
   const screenMesh = useMemo(() => {
     if (!nodeHierarchy) return null;
     return findScreenMesh(nodeHierarchy);
-  }, [nodeHierarchy]);
+  }, [nodeHierarchy, findScreenMesh]);
 
   // Normalize the RootNode's position, rotation, and scale
   useEffect(() => {
@@ -103,12 +99,11 @@ export default function PhoneModel() {
             <Html
               transform
               center
-              
               distanceFactor={0.415}
               position={node.geometry.boundingBox?.getCenter(new Vector3())}
               rotation={[Math.PI / 2, Math.PI / 2, 0]}
               style={{
-                transform: "rotateY(180deg)",
+                transform: 'rotateY(180deg)',
               }}
               contentEditable={false}
             >
@@ -135,12 +130,7 @@ export default function PhoneModel() {
 
     // Render non-mesh nodes and their children
     return (
-      <group
-        key={node.uuid}
-        position={node.position}
-        rotation={node.rotation}
-        scale={node.scale}
-      >
+      <group key={node.uuid} position={node.position} rotation={node.rotation} scale={node.scale}>
         {children.map((child) => renderHierarchy(child))}
       </group>
     );

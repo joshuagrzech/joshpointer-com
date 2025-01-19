@@ -1,32 +1,116 @@
-import { motion } from "framer-motion";
-import { getNavigationConfig } from "@/lib/config";
-import type { Config } from "@/types/config";
+'use client';
 
-export default function AppContent({ activeApp }: { activeApp: string }) {
-  const navigation = getNavigationConfig();
+import { motion, AnimatePresence } from 'framer-motion';
+import dynamic from 'next/dynamic';
+import { useNavigation } from '@/hooks/useNavigation';
+import { Suspense, memo } from 'react';
+import { useIsMobile } from '@/hooks/useIsMobile';
+
+// Dynamically import components with loading states
+const Projects = dynamic(() => import('@/components/sections/Projects'), {
+  loading: () => <LoadingPlaceholder />,
+  ssr: false,
+});
+
+const Contact = dynamic(() => import('@/components/sections/Contact'), {
+  loading: () => <LoadingPlaceholder />,
+  ssr: false,
+});
+
+const Blog = dynamic(() => import('@/components/sections/Blog'), {
+  loading: () => <LoadingPlaceholder />,
+  ssr: false,
+});
+
+const Links = dynamic(() => import('@/components/Links'), {
+  loading: () => <LoadingPlaceholder />,
+  ssr: false,
+});
+
+const About = dynamic(() => import('@/components/sections/About'), {
+  loading: () => <LoadingPlaceholder />,
+  ssr: false,
+});
+
+const Skills = dynamic(() => import('@/components/sections/Skills'), {
+  loading: () => <LoadingPlaceholder />,
+  ssr: false,
+});
+
+// Memoized loading placeholder
+const LoadingPlaceholder = memo(() => (
+  <div className="w-full h-full flex items-center justify-center">
+    <div className="animate-pulse bg-gray-200 rounded-lg w-full h-64" />
+  </div>
+));
+
+LoadingPlaceholder.displayName = 'LoadingPlaceholder';
+
+// Animation variants with improved performance
+const pageTransitionVariants = {
+  initial: {
+    opacity: 0,
+    x: 100,
+    transition: { duration: 0.3 },
+  },
+  animate: {
+    opacity: 1,
+    x: 0,
+    transition: { duration: 0.3 },
+  },
+  exit: {
+    opacity: 0,
+    x: 100,
+    transition: { duration: 0.2 },
+  },
+};
+
+// Component selector function
+function getComponent(route: string) {
+  switch (route) {
+    case 'about':
+      return <About />;
+    case 'projects':
+      return <Projects />;
+    case 'skills':
+      return <Skills />;
+    case 'contact':
+      return <Contact />;
+    case 'blog':
+      return <Blog />;
+    case 'links':
+      return <Links />;
+    case 'home':
+      return <div aria-label="Home" />;
+    default:
+      return null;
+  }
+}
+
+export default function ContentView() {
+  const { currentRoute, isReady } = useNavigation();
+  const isMobile = useIsMobile();
+
+  if (!isReady) {
+    return (
+      <div className="w-full h-full flex items-center justify-center">
+        <div className="animate-pulse">Loading...</div>
+      </div>
+    );
+  }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[calc(100vh-4rem)] text-center space-y-8 py-8">
+    <AnimatePresence mode="sync">
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="space-y-4"
+        key={currentRoute}
+        variants={pageTransitionVariants}
+        initial="initial"
+        animate="animate"
+        exit="exit"
+        className={`h-full ${isMobile ? 'p-4' : 'p-8'} overflow-y-auto`}
       >
-        <div className="grid grid-cols-2 gap-4">
-          {navigation.map((item: Config["navigation"][0]) => (
-            <motion.a
-              key={item.id}
-              href={`#${item.id}`}
-              className="flex flex-col items-center justify-center p-4 rounded-lg bg-card hover:bg-accent transition-colors"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <span className="text-lg font-medium">{item.label}</span>
-            </motion.a>
-          ))}
-        </div>
+        <Suspense fallback={<LoadingPlaceholder />}>{getComponent(currentRoute)}</Suspense>
       </motion.div>
-    </div>
+    </AnimatePresence>
   );
 }

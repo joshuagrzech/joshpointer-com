@@ -1,49 +1,40 @@
-import "./globals.css";
-import type { Metadata, Viewport } from "next";
-import { Providers } from "./providers";
-import dynamic from "next/dynamic";
-import { Suspense } from "react";
-import { getBrandingConfig } from "@/lib/config";
+import './globals.css';
+import type { Metadata, Viewport } from 'next';
+import { Providers } from './providers';
+import dynamic from 'next/dynamic';
+import { Suspense } from 'react';
+import { getBrandingConfig } from '@/lib/config';
 
 // Dynamic imports with loading states and chunking
 const ScrollProgress = dynamic(
   () =>
-    import("@/components/ui/ScrollProgress").then((mod) => ({
+    import('@/components/ui/ScrollProgress').then((mod) => ({
       default: mod.ScrollProgress,
     })),
   {
     ssr: false,
     loading: () => (
-      <div
-        className="h-1 bg-gray-200 animate-pulse"
-        aria-label="Loading scroll progress"
-      />
+      <div className="h-1 bg-gray-200 animate-pulse" aria-label="Loading scroll progress" />
     ),
   }
 );
 
-const RootCanvasClient = dynamic(
-  () => import("@/components/layout/RootCanvasClient"),
-  {
-    ssr: false,
-    loading: () => (
-      <div
-        className="fixed inset-0 bg-gradient-to-r from-gray-100 to-gray-200 animate-pulse"
-        aria-label="Loading canvas"
-      />
-    ),
-  }
-);
+const RootCanvasClient = dynamic(() => import('@/components/layout/RootCanvasClient'), {
+  ssr: false,
+  loading: () => (
+    <div
+      className="fixed inset-0 bg-gradient-to-r from-gray-100 to-gray-200 animate-pulse"
+      aria-label="Loading canvas"
+    />
+  ),
+});
 
-const NavigationSync = dynamic(
-  () => import("@/components/layout/NavigationSync"),
-  {
-    ssr: false,
-    loading: () => null,
-  }
-);
+const NavigationSync = dynamic(() => import('@/components/layout/NavigationSync'), {
+  ssr: false,
+  loading: () => null,
+});
 
-const ThemeToggle = dynamic(() => import("@/components/ui/ThemeToggle"), {
+const ThemeToggle = dynamic(() => import('@/components/ui/ThemeToggle'), {
   ssr: false,
   loading: () => (
     <div
@@ -56,7 +47,7 @@ const ThemeToggle = dynamic(() => import("@/components/ui/ThemeToggle"), {
 // Metadata configuration with improved SEO
 export function generateMetadata(): Metadata {
   const branding = getBrandingConfig();
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
 
   return {
     metadataBase: new URL(baseUrl),
@@ -65,9 +56,9 @@ export function generateMetadata(): Metadata {
       default: branding.metadata.title,
     },
     description: branding.metadata.description,
-    manifest: "/manifest.json",
+    manifest: '/manifest.json',
     applicationName: branding.name,
-    keywords: ["portfolio", "developer", "web development"],
+    keywords: ['portfolio', 'developer', 'web development'],
     authors: [{ name: branding.name }],
     creator: branding.name,
     publisher: branding.name,
@@ -78,24 +69,24 @@ export function generateMetadata(): Metadata {
     },
     icons: {
       icon: [
-        { url: "/favicon.ico", sizes: "any" },
-        { url: "/icon.svg", type: "image/svg+xml" },
+        { url: '/favicon.ico', sizes: 'any' },
+        { url: '/icon.svg', type: 'image/svg+xml' },
       ],
-      apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
+      apple: [{ url: '/apple-touch-icon.png', sizes: '180x180' }],
     },
     openGraph: {
       title: branding.metadata.title,
       description: branding.metadata.description,
-      type: "website",
+      type: 'website',
       siteName: branding.metadata.title,
-      locale: "en_US",
+      locale: 'en_US',
       url: baseUrl,
     },
     twitter: {
-      card: "summary_large_image",
+      card: 'summary_large_image',
       title: branding.metadata.title,
       description: branding.metadata.description,
-      creator: "@yourtwitterhandle",
+      creator: '@yourtwitterhandle',
     },
     robots: {
       index: true,
@@ -103,9 +94,9 @@ export function generateMetadata(): Metadata {
       googleBot: {
         index: true,
         follow: true,
-        "max-video-preview": -1,
-        "max-image-preview": "large",
-        "max-snippet": -1,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
       },
     },
     verification: {
@@ -120,15 +111,15 @@ export function generateMetadata(): Metadata {
 // Viewport configuration with improved mobile support
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#000000" },
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+    { media: '(prefers-color-scheme: dark)', color: '#000000' },
   ],
-  width: "device-width",
+  width: 'device-width',
   initialScale: 1,
   maximumScale: 5,
   userScalable: true,
-  viewportFit: "cover",
-  colorScheme: "light dark",
+  viewportFit: 'cover',
+  colorScheme: 'light dark',
 };
 
 // Server Component for loading states
@@ -142,17 +133,9 @@ function LoadingFallback() {
   );
 }
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout() {
   return (
-    <html
-      lang="en"
-      suppressHydrationWarning
-      className="antialiased scroll-smooth"
-    >
+    <html lang="en" suppressHydrationWarning className="antialiased scroll-smooth">
       <head />
       <body className="overflow-x-hidden">
         <Suspense fallback={<LoadingFallback />}>
@@ -162,44 +145,19 @@ export default function RootLayout({
               <NavigationSync />
             </Suspense>
 
-            <Suspense
-              fallback={
-                <div
-                  className="h-1 bg-gray-200 animate-pulse"
-                  role="progressbar"
-                />
-              }
-            >
+            <Suspense fallback={<div />}>
               <ScrollProgress />
             </Suspense>
 
-            <Suspense
-              fallback={
-                <div
-                  className="w-10 h-10 rounded-full bg-gray-200 animate-pulse"
-                  role="status"
-                />
-              }
-            >
-              <ThemeToggle />
+            <Suspense fallback={<div />}>
+              <ThemeToggle route={'home'} />
             </Suspense>
 
             <main className="relative w-full h-screen">
               {/* Full screen canvas with GPU acceleration */}
-              <div
-                className="fixed inset-0 w-full h-full"
-                style={{ zIndex: 0 }}
-              >
-                <Suspense
-                  fallback={
-                    <div
-                      className="w-full h-full bg-gradient-to-r from-gray-100 to-gray-200 animate-pulse"
-                      role="status"
-                      aria-label="Loading canvas"
-                    />
-                  }
-                >
-                  <RootCanvasClient>{children}</RootCanvasClient>
+              <div className="fixed inset-0 w-full h-full" style={{ zIndex: 0 }}>
+                <Suspense fallback={<div />}>
+                  <RootCanvasClient />
                 </Suspense>
               </div>
             </main>

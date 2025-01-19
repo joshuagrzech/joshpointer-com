@@ -1,135 +1,197 @@
-import React, { useState, useCallback, useEffect } from "react";
-import * as THREE from "three";
-import PCBTraceManager from "./PCBTraceManager";
+// RandomPCB.tsx
+import React, { useState, useEffect, useCallback } from 'react';
+import * as THREE from 'three';
+import PCBTrace from './PCBTrace';
+import { getShapePathPoints, loadPolygon2D, Polygon2D } from './ShapeUtils';
+import { buildGrid, bfsPath, gridPathToPoints } from './GridPathfind';
 
 interface RandomPCBProps {
-  count?: number;
-  bounds?: number;
-  density?: number;
-  minAngles?: number;
-  colorScheme?: 'rainbow' | 'monochrome' | 'complementary';
+  count?: number; // Number of simultaneous traces
+  shape?: string; // "rectangle", "circle", or an SVG path
+  mode?: 'fill' | 'surround';
+  gridSize?: number; // default = 0.5
+  margin?: number; // Outer boundary for surround mode
+  pathFollowProbability?: number; // Percentage of traces that follow the shape path
 }
 
 interface TraceData {
   id: string;
-  start: THREE.Vector3;
-  end: THREE.Vector3;
+  points: THREE.Vector3[]; // BFS path
   color: THREE.Color;
-  startDelay: number;
+  isActive: boolean;
+  index: number;
 }
 
-const RandomPCB: React.FC<RandomPCBProps> = React.memo(({ 
-  count = 3,
-  bounds = 2.5,
-  density = 1,
-  minAngles = 3,
-  colorScheme = 'rainbow'
+const RandomPCB: React.FC<RandomPCBProps> = ({
+  count = 5,
+  shape = 'rectangle',
+  mode = 'fill',
+  gridSize = 0.5,
+  margin = 2,
+  pathFollowProbability = 0.5,
 }) => {
+  const [polygon, setPolygon] = useState<Polygon2D | null>(null);
   const [traces, setTraces] = useState<TraceData[]>([]);
-  const [activeTraceCount, setActiveTraceCount] = useState(0);
 
-  // Generate color based on scheme
-  const generateColor = useCallback(() => {
-    switch (colorScheme) {
-      case 'monochrome': {
-        const hue = Math.random() * 360;
-        return new THREE.Color(`hsl(${hue}, 80%, 50%)`);
+  // Load the shape polygon
+  useEffect(() => {
+    (async () => {
+      const poly = await loadPolygon2D(shape);
+      setPolygon(poly);
+    })();
+  }, [shape]);
+
+  // Once we have polygon, build a grid
+  const [grid, setGrid] = useState<ReturnType<typeof buildGrid> | null>(null);
+
+  useEffect(() => {
+    if (!polygon) return;
+    const fillMode = mode === 'fill';
+    const g = buildGrid(polygon, gridSize, fillMode, margin);
+    setGrid(g);
+  }, [polygon, mode, gridSize, margin]);
+
+  // Helper: pick random free cell for start or end
+  const pickRandomFreeCell = useCallback((): [number, number] | null => {
+    if (!grid) return null;
+
+    const { cells, width, height } = grid;
+    let tries = 0;
+    while (tries < 50) {
+      const x = Math.floor(Math.random() * width);
+      const y = Math.floor(Math.random() * height);
+      if (cells[y][x] === 0) {
+        return [x, y];
       }
-      case 'complementary': {
-        const baseHue = Math.random() * 180;
-        const complementaryHue = baseHue + (Math.random() > 0.5 ? 180 : 0);
-        return new THREE.Color(`hsl(${complementaryHue}, 100%, 50%)`);
-      }
-      default:
-        return new THREE.Color(`hsl(${Math.random() * 360}, 100%, 50%)`);
+      tries++;
     }
-  }, [colorScheme]);
+    return null;
+  }, [grid]);
 
-  // Generate a point on a grid
-  const generateGridPoint = useCallback(() => {
-    const gridSize = { x: 5, y: 3, z: 5 };
-    const cellSize = {
-      x: (bounds * 2) / gridSize.x,
-      y: bounds / gridSize.y,
-      z: (bounds * 2) / gridSize.z
-    };
+  const createTrace = useCallback(
+    async (index: number): Promise<TraceData | null> => {
+      const followExactPath = Math.random() < (pathFollowProbability ?? 0);
 
-    const gridX = Math.floor(Math.random() * gridSize.x);
-    const gridY = Math.floor(Math.random() * gridSize.y);
-    const gridZ = Math.floor(Math.random() * gridSize.z);
+      if (followExactPath && polygon) {
+        // Follow the exact shape path
+        const pathPoints = await getShapePathPoints(shape);
+        if (!pathPoints || pathPoints.length < 2) {
+          console.warn('Invalid shape path points. Path length:', pathPoints?.length);
+          return null;
+        }
 
-    const x = (gridX - (gridSize.x - 1) / 2) * cellSize.x;
-    const y = (gridY - (gridSize.y - 1) / 2) * cellSize.y;
-    const z = (gridZ - (gridSize.z - 1) / 2) * cellSize.z;
+        return {
+          id: Math.random().toString(36).slice(2, 9),
+          points: pathPoints,
+          color: new THREE.Color(`hsl(${Math.random() * 360}, 100%, 50%)`),
+          isActive: true,
+          index,
+        };
+      } else if (grid) {
+        // Use grid-based pathfinding
+        const startCell = pickRandomFreeCell();
+        const endCell = pickRandomFreeCell();
+        if (!startCell || !endCell) {
+          console.warn('Invalid grid cells for pathfinding');
+          return null;
+        }
 
-    return new THREE.Vector3(
-      x + (Math.random() - 0.5) * cellSize.x * density,
-      y + (Math.random() - 0.5) * cellSize.y * density,
-      z + (Math.random() - 0.5) * cellSize.z * density
-    );
-  }, [bounds, density]);
+        const path = bfsPath(grid.cells, grid.width, grid.height, startCell, endCell);
+        if (!path || path.length < 2) {
+          console.warn('Invalid BFS path. Path length:', path?.length);
+          return null;
+        }
 
-  // Generate new trace data
-  const generateNewTrace = useCallback((delay: number = 0): TraceData => {
-    const start = generateGridPoint();
-    let end;
-    
-    // Generate end point that's at least 2 grid cells away
-    do {
-      end = generateGridPoint();
-    } while (end.distanceTo(start) < bounds * 0.8);
+        const points = gridPathToPoints(path, grid.origin, grid.gridSize);
+        if (!points || points.length < 2) {
+          console.warn('Invalid converted BFS path points. Path length:', points?.length);
+          return null;
+        }
 
-    return {
-      id: Math.random().toString(36).substr(2, 9),
-      start,
-      end,
-      color: generateColor(),
-      startDelay: delay
-    };
-  }, [generateGridPoint, generateColor, bounds]);
+        const color = new THREE.Color(`hsl(${Math.random() * 360}, 100%, 50%)`);
 
-  // Handle trace completion
-  const handleTraceComplete = useCallback((id: string) => {
-    setTraces(prev => {
-      // Remove the completed trace
-      const newTraces = prev.filter(t => t.id !== id);
-      
-      // Only add a new trace if we're below the maximum count
-      if (newTraces.length < count) {
-        const newTrace = generateNewTrace(1000);
-        return [...newTraces, newTrace];
+        return {
+          id: Math.random().toString(36).slice(2, 9),
+          points,
+          color,
+          isActive: true,
+          index,
+        };
       }
-      
-      return newTraces;
-    });
-  }, [generateNewTrace, count]);
+
+      console.warn('createTrace failed to create a trace');
+      return null;
+    },
+    [grid, polygon, shape, pathFollowProbability, pickRandomFreeCell]
+  );
+
+  // Replace a trace after completion
+  const handleTraceComplete = useCallback(
+    (id: string) => {
+      const updateTrace = async () => {
+        setTraces((prev) => {
+          const idx = prev.findIndex((t) => t.id === id);
+          if (idx === -1) return prev;
+
+          createTrace(prev[idx].index).then((newTrace) => {
+            if (newTrace) {
+              setTraces((current) => {
+                const copy = [...current];
+                copy[idx] = newTrace;
+                return copy;
+              });
+            }
+          });
+
+          return prev;
+        });
+      };
+
+      updateTrace();
+    },
+    [createTrace]
+  );
 
   // Initialize traces
   useEffect(() => {
-    const initialTraces = Array.from({ length: count }, (_, i) => 
-      generateNewTrace(i * 1000)
-    );
-    setTraces(initialTraces);
-    setActiveTraceCount(count);
-  }, [count, generateNewTrace]);
+    if (!grid) return;
+
+    const initializeTraces = async () => {
+      const arr: TraceData[] = [];
+      for (let i = 0; i < count; i++) {
+        const t = await createTrace(i);
+        if (t && t.points) {
+          arr.push(t);
+          console.log(`Created trace ${i}:`, t.points.length, 'points');
+        }
+      }
+      console.log(`Generated ${arr.length} traces`);
+      setTraces(arr);
+    };
+
+    initializeTraces();
+  }, [grid, count, createTrace]);
 
   return (
     <group>
-      {traces.map(trace => (
-        <PCBTraceManager
-          key={trace.id}
-          id={trace.id}
-          start={trace.start}
-          end={trace.end}
-          color={trace.color}
-          thickness={0.02}
-          glowIntensity={2}
-          startDelay={trace.startDelay}
-          onComplete={() => handleTraceComplete(trace.id)}
-        />
-      ))}
+      {traces.map((trace) => {
+        if (!trace.points || trace.points.length < 2) {
+          console.error('Invalid points array for trace', trace);
+          return null;
+        }
+
+        return (
+          <PCBTrace
+            key={trace.id}
+            points={trace.points}
+            color={trace.color}
+            isAnimating={trace.isActive}
+            onComplete={() => handleTraceComplete(trace.id)}
+          />
+        );
+      })}
     </group>
   );
-});
+};
 
 export default RandomPCB;

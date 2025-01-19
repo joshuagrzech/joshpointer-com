@@ -1,11 +1,15 @@
 import { ReactNode, useEffect } from 'react';
 import { animated, useSpring } from '@react-spring/three';
-import { Group } from 'three';
+
+// Define a type for animation values
+type AnimationValues = {
+  [key: string]: number | string | boolean;
+};
 
 type AnimationConfig = {
-  onTrue?: Record<string, any>;
-  onFalse?: Record<string, any>;
-  onValue?: any;
+  onTrue?: Record<string, AnimationValues[keyof AnimationValues]>;
+  onFalse?: Record<string, AnimationValues[keyof AnimationValues]>;
+  onValue?: boolean;
   config?: {
     mass?: number;
     tension?: number;
@@ -24,10 +28,13 @@ type SpringGroupProps = {
 };
 
 const getInitialState = (animations: AnimationConfig[]) => {
-  return animations.reduce((acc, animation) => ({
-    ...acc,
-    ...(animation.onFalse || {})
-  }), {});
+  return animations.reduce(
+    (acc, animation) => ({
+      ...acc,
+      ...(animation.onFalse || {}),
+    }),
+    {}
+  );
 };
 
 const getCurrentState = (animations: AnimationConfig[]) => {
@@ -35,18 +42,14 @@ const getCurrentState = (animations: AnimationConfig[]) => {
     if (animation.onValue !== undefined) {
       return {
         ...acc,
-        ...(animation.onValue ? animation.onTrue : animation.onFalse)
+        ...(animation.onValue ? animation.onTrue : animation.onFalse),
       };
     }
     return acc;
   }, {});
 };
 
-export const SpringGroup = ({ 
-  children, 
-  animations,
-  config: defaultConfig 
-}: SpringGroupProps) => {
+export const SpringGroup = ({ children, animations, config: defaultConfig }: SpringGroupProps) => {
   const [springs, api] = useSpring(() => ({
     // Always start with onFalse values
     ...getInitialState(animations),
@@ -69,9 +72,5 @@ export const SpringGroup = ({
     });
   }, [animations, api, defaultConfig]);
 
-  return (
-    <animated.group {...springs}>
-      {children}
-    </animated.group>
-  );
-}; 
+  return <animated.group {...springs}>{children}</animated.group>;
+};

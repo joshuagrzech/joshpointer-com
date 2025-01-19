@@ -1,8 +1,7 @@
-import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
-import { getHeroConfig } from "@/lib/config";
-import type { Config } from "@/types/config";
+import { motion } from 'framer-motion';
+import { Button } from '@/components/ui/button';
+import { ArrowRight } from 'lucide-react';
+import { getHeroConfig } from '@/lib/config';
 
 export default function Hero() {
   const hero = getHeroConfig();
@@ -15,9 +14,7 @@ export default function Hero() {
         transition={{ duration: 0.5 }}
         className="space-y-4"
       >
-        <h1 className="text-4xl font-bold sm:text-5xl md:text-6xl lg:text-7xl">
-          {hero.title}
-        </h1>
+        <h1 className="text-4xl font-bold sm:text-5xl md:text-6xl lg:text-7xl">{hero.title}</h1>
         <p className="mx-auto max-w-[700px] text-lg text-muted-foreground sm:text-xl">
           {hero.subtitle}
         </p>
@@ -35,4 +32,4 @@ export default function Hero() {
       </motion.div>
     </div>
   );
-} 
+}

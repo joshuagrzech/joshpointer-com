@@ -1,7 +1,9 @@
-import { useRef, useMemo } from "react";
-import { Group, Color, DirectionalLight } from "three";
-import { Backdrop, Environment, BakeShadows, AccumulativeShadows, RandomizedLight, useHelper } from "@react-three/drei";
-import { DirectionalLightHelper } from "three";
+'use client';
+
+import { useRef } from 'react';
+import { Group, DirectionalLight } from 'three';
+import { Environment, BakeShadows, useHelper } from '@react-three/drei';
+import { DirectionalLightHelper } from 'three';
 
 interface InfiniteRoomProps {
   children: React.ReactNode;
@@ -12,81 +14,38 @@ interface InfiniteRoomProps {
   showHelpers?: boolean;
 }
 
-export default function InfiniteRoom({ 
-  children, 
-  roomSize = 20, 
-  color = "#0000ff",
-  floatHeight = 0.5,
-  showHelpers = false,
-  opacity = 0.8
-}: InfiniteRoomProps) {
+export default function InfiniteRoom({ children, showHelpers = false }: InfiniteRoomProps) {
   const groupRef = useRef<Group>(null);
-  const lightRef = useRef<DirectionalLight>(null);
-  
-  // Only show helpers in development
-  if (showHelpers && process.env.NODE_ENV === 'development') {
-    useHelper(lightRef as React.MutableRefObject<DirectionalLight>, DirectionalLightHelper, 1, 'red');
-  }
+  const lightRef = useRef<DirectionalLight>(null) as React.MutableRefObject<DirectionalLight>;
 
-  // Memoize color to prevent unnecessary updates
-  const backdropMaterial = useMemo(() => ({
-    color: new Color(color),
-    opacity,
-    transparent: opacity < 1,
-  }), [color, opacity]);
+  useHelper(
+    showHelpers && process.env.NODE_ENV === 'development' ? lightRef : null,
+    DirectionalLightHelper
+  );
 
   return (
-    <group ref={groupRef} rotation={[0, 0, 0]}>
-      {/* Optimized lighting setup */}
-      <ambientLight intensity={0.4} />
-      
+    <group ref={groupRef}>
+      {/* Main directional light */}
       <directionalLight
         ref={lightRef}
-        position={[5, 5, 5]}
-        intensity={0.6}
+        position={[10, 10, 10]}
+        intensity={1}
         castShadow
-        shadow-mapSize={[2048, 2048]}
-        shadow-bias={-0.0001}
-      >
-        <orthographicCamera attach="shadow-camera" args={[-10, 10, 10, -10]} />
-      </directionalLight>
-
-      {/* Additional rim light for depth */}
-      <directionalLight
-        position={[-5, 3, -5]}
-        intensity={0.2}
-        color="#6495ED"
+        shadow-mapSize={[1024, 1024]}
       />
 
       {/* Bake shadows for performance */}
       <BakeShadows />
 
-
       {/* Enhanced environment */}
       <Environment
-        preset="city"
+        preset={'studio'}
+        environmentRotation={[0, Math.PI * 0.15, 0]}
         background={false}
-        blur={0.8}
       />
-{/* 
-      <Backdrop
-        receiveShadow
-        castShadow
-        floor={roomSize/2}
-        segments={20}
-        scale={[roomSize, roomSize/2, 1]}
-        position={[0, floatHeight * -1.15, -roomSize/4]}
-      >
-        <meshStandardMaterial 
-          {...backdropMaterial}
-        
-        />
-      </Backdrop> */}
 
       {/* Children positioned above the floor */}
-      <group position={[0, 0, 0]}>
-        {children}
-      </group>
+      <group position={[0, 0, 0]}>{children}</group>
     </group>
   );
-} 
+}
