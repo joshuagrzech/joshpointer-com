@@ -4,6 +4,8 @@ import { Providers } from './providers';
 import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
 import { getBrandingConfig } from '@/lib/config';
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 // Dynamic imports with loading states and chunking
 const ScrollProgress = dynamic(
@@ -137,6 +139,8 @@ export default function RootLayout() {
   return (
     <html lang="en" suppressHydrationWarning className="antialiased scroll-smooth">
       <head />
+      <Analytics />
+      <SpeedInsights />
       <body className="overflow-x-hidden">
         <Suspense fallback={<LoadingFallback />}>
           <Providers>

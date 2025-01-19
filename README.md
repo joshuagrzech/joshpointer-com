@@ -46,7 +46,7 @@ A modern, interactive developer portfolio built with Next.js, Three.js, and Reac
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/developer-folio.git
+git clone https://github.com/joshuapointer/developer-folio.git
 ```
 
 2. Install dependencies:
