@@ -73,6 +73,13 @@
   }
   body {
     @apply bg-background text-foreground font-sans;
+    /* Improve text rendering quality */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    /* Prevent blur from transforms */
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
   }
   h1, h2, h3, h4, h5, h6 {
     @apply font-heading;
@@ -100,8 +107,20 @@ canvas {
   pointer-events: auto;
   overflow: hidden;
   border-radius: 24px;
+  /* Improve rendering quality for the phone screen */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  image-rendering: crisp-edges;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 .htmlScreen > div {
   transform-origin: top left;
+  /* Ensure crisp rendering */
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }

@@ -46,7 +46,7 @@ const ThemeToggle = dynamic(() => import('@/components/ui/ThemeToggle'), {
   ),
 });
 
-// Metadata configuration with improved SEO
+// Enhanced metadata configuration with improved SEO
 export function generateMetadata(): Metadata {
   const branding = getBrandingConfig();
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
@@ -60,7 +60,17 @@ export function generateMetadata(): Metadata {
     description: branding.metadata.description,
     manifest: '/manifest.json',
     applicationName: branding.name,
-    keywords: ['portfolio', 'developer', 'web development'],
+    keywords: [
+      'portfolio', 
+      'developer', 
+      'web development', 
+      'React Native', 
+      'iOS', 
+      'mobile development',
+      'software engineer',
+      'frontend developer',
+      'mobile apps'
+    ],
     authors: [{ name: branding.name }],
     creator: branding.name,
     publisher: branding.name,
@@ -83,12 +93,21 @@ export function generateMetadata(): Metadata {
       siteName: branding.metadata.title,
       locale: 'en_US',
       url: baseUrl,
+      images: [
+        {
+          url: '/og-image.png',
+          width: 1200,
+          height: 630,
+          alt: branding.metadata.title,
+        },
+      ],
     },
     twitter: {
       card: 'summary_large_image',
       title: branding.metadata.title,
       description: branding.metadata.description,
       creator: '@yourtwitterhandle',
+      images: ['/og-image.png'],
     },
     robots: {
       index: true,
@@ -107,10 +126,12 @@ export function generateMetadata(): Metadata {
     alternates: {
       canonical: baseUrl,
     },
+    category: 'technology',
+    classification: 'portfolio',
   };
 }
 
-// Viewport configuration with improved mobile support
+// Enhanced viewport configuration with improved mobile support
 export const viewport: Viewport = {
   themeColor: [
     { media: '(prefers-color-scheme: light)', color: '#ffffff' },
@@ -124,12 +145,17 @@ export const viewport: Viewport = {
   colorScheme: 'light dark',
 };
 
-// Server Component for loading states
+// Enhanced loading fallback with better accessibility
 function LoadingFallback() {
   return (
-    <div className="flex items-center justify-center min-h-screen">
-      <div className="animate-pulse" role="status" aria-label="Loading">
-        Loading...
+    <div 
+      className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800"
+      role="status"
+      aria-label="Loading portfolio"
+    >
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4" />
+        <p className="text-muted-foreground">Loading portfolio...</p>
       </div>
     </div>
   );
@@ -137,8 +163,19 @@ function LoadingFallback() {
 
 export default function RootLayout() {
   return (
-    <html lang="en" suppressHydrationWarning className="antialiased scroll-smooth">
-      <head />
+    <html 
+      lang="en" 
+      suppressHydrationWarning 
+      className="antialiased scroll-smooth"
+    >
+      <head>
+        {/* Preload critical resources */}
+        <link rel="preload" href="/fonts/Inter-Regular.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+        <link rel="preload" href="/fonts/Inter-Medium.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+        <link rel="preload" href="/fonts/Inter-Bold.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+        <link rel="dns-prefetch" href="//fonts.gstatic.com" />
+      </head>
       <Analytics />
       <SpeedInsights />
       <body className="overflow-x-hidden">
@@ -159,7 +196,11 @@ export default function RootLayout() {
 
             <main className="relative w-full h-screen">
               {/* Full screen canvas with GPU acceleration */}
-              <div className="fixed inset-0 w-full h-full" style={{ zIndex: 0 }}>
+              <div 
+                className="fixed inset-0 w-full h-full" 
+                style={{ zIndex: 0 }}
+                aria-hidden="true"
+              >
                 <Suspense fallback={<div />}>
                   <RootCanvasClient />
                 </Suspense>
