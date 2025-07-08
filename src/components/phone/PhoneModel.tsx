@@ -1,144 +1,176 @@
 'use client';
 
-import React, { useEffect, useMemo, useRef, useCallback } from 'react';
-import { Html, useGLTF } from '@react-three/drei';
-import { Mesh, Box3, Vector3, Group, Object3D } from 'three';
+import React, { useMemo, useRef, useEffect } from 'react';
+import { Html } from '@react-three/drei';
+import { useFrame, useThree } from '@react-three/fiber';
+import * as THREE from 'three';
 import PhoneScreen from './PhoneScreen';
 
-interface NodeStructure {
-  node: Object3D;
-  children: NodeStructure[];
-}
-
 export default function PhoneModel() {
-  const groupRef = useRef<Group>(null);
-  const { scene } = useGLTF('/iphone.glb');
-
-  // Recursively traverse nodes and build a hierarchy
-  const buildNodeHierarchy = useCallback((node: Object3D): NodeStructure => {
-    const children: NodeStructure[] = [];
-    node.children.forEach((child) => {
-      children.push(buildNodeHierarchy(child));
+  const meshRef = useRef<THREE.Mesh>(null);
+  const { gl, scene, camera, viewport } = useThree();
+  const size = {
+    "width": 2286,
+    "height": 1232,
+    "top": 0,
+    "left": 0,
+    "updateStyle": true
+}
+  // iPhone aspect ratio (roughly 19.5:9 or 2.17:1)
+  const iPhoneAspectRatio = 9/10
+  const phoneWidth = 1.5;
+  const phoneHeight = phoneWidth / iPhoneAspectRatio;
+  
+  // Create render target that matches viewport size
+  const renderTarget = useMemo(() => {
+    return new THREE.WebGLRenderTarget(size.width, size.height, {
+      minFilter: THREE.LinearFilter,
+      magFilter: THREE.LinearFilter,
+      format: THREE.RGBAFormat,
     });
-    return { node, children };
-  }, []);
-
-  const nodeHierarchy = useMemo(() => {
-    if (!scene) return null;
-    return buildNodeHierarchy(scene);
-  }, [scene, buildNodeHierarchy]);
-
-  // Locate the specific "screen" mesh by traversing the hierarchy
-  const findScreenMesh = useCallback((hierarchy: NodeStructure): Mesh | null => {
-    if (hierarchy.node instanceof Mesh && hierarchy.node.material.name === 'screen.001') {
-      hierarchy.node.material.color.set('#000000');
-      hierarchy.node.material.metalness = 0;
-      hierarchy.node.material.reflectivity = 1;
-      hierarchy.node.material.clearcoat = 1;
-      hierarchy.node.material.clearcoatRoughness = 0;
-      hierarchy.node.material.thickness = 0.1;
-      hierarchy.node.material.envMapIntensity = 1;
-
-      return hierarchy.node;
-    }
-
-    for (const child of hierarchy.children) {
-      const found = findScreenMesh(child);
-      if (found) return found;
-    }
-    return null;
-  }, []);
-
-  const screenMesh = useMemo(() => {
-    if (!nodeHierarchy) return null;
-    return findScreenMesh(nodeHierarchy);
-  }, [nodeHierarchy, findScreenMesh]);
-
-  // Normalize the RootNode's position, rotation, and scale
+  }, [size.width, size.height]);
+  
+  // Update render target size when viewport changes
   useEffect(() => {
-    if (groupRef.current) {
-      const box = new Box3().setFromObject(groupRef.current);
-      const center = new Vector3();
-      const size = new Vector3();
-      box.getCenter(center);
-      box.getSize(size);
-
-      // Only center horizontally, preserve vertical position
-      groupRef.current.position.x -= center.x;
-      groupRef.current.position.z -= center.z;
-
-      // Normalize the scale
-      const maxAxis = Math.max(size.x, size.y, size.z);
-      const scale = 1 / maxAxis;
-      groupRef.current.scale.set(scale, scale, scale);
-
-      // Enable shadows for all meshes
-      groupRef.current.traverse((child) => {
-        if (child instanceof Mesh) {
-          child.castShadow = true;
-          child.receiveShadow = true;
+    renderTarget.setSize(size.width, size.height);
+  }, [size.width, size.height, renderTarget]);
+  
+  // Glass refraction shader - exact original but with proper UV mapping
+  const vertexShader = `
+    varying vec2 vUv;
+    varying vec4 vScreenPosition;
+    
+    void main() {
+      vUv = uv;
+      vScreenPosition = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      gl_Position = vScreenPosition;
+    }
+  `;
+  
+  const fragmentShader = `
+    uniform float u_time;
+    uniform vec2 u_resolution;
+    uniform sampler2D u_backgroundTexture;
+    varying vec2 vUv;
+    varying vec4 vScreenPosition;
+    
+    void main() {
+      // Convert to screen coordinates
+      vec2 screenUv = (vScreenPosition.xy / vScreenPosition.w) * 0.5 + 0.5;
+      vec2 uv = vUv;
+      
+      vec2 mouse = u_resolution / 2.0; // Keep centered
+      vec2 m2 = (uv - mouse / u_resolution);
+      
+      float roundedBox = pow(abs(m2.x * u_resolution.x / u_resolution.y), 8.0) + pow(abs(m2.y), 8.0);
+      float rb1 = clamp((1.0 - roundedBox * 10000.0) * 8.0, 0.0, 1.0);
+      float rb2 = clamp((0.95 - roundedBox * 9500.0) * 16.0, 0.0, 1.0) - clamp(pow(0.9 - roundedBox * 9500.0, 1.0) * 16.0, 0.0, 1.0);
+      float rb3 = (clamp((1.5 - roundedBox * 11000.0) * 2.0, 0.0, 1.0) - clamp(pow(1.0 - roundedBox * 11000.0, 1.0) * 2.0, 0.0, 1.0));
+      
+      vec4 fragColor = vec4(0.0);
+      float transition = smoothstep(0.0, 1.0, rb1 + rb2);
+      
+      if (transition > 0.0) {
+        // Lens distortion applied to screen coordinates
+        vec2 lens = ((screenUv - 0.5) * 1.0 * (1.0 - roundedBox * 5000.0) + 0.5);
+        
+        // Blur with the original 9x9 kernel using screen coordinates
+        float total = 0.0;
+        vec2 pixelSize = 1.0 / u_resolution;
+        for (float x = -4.0; x <= 4.0; x += 1.0) {
+          for (float y = -4.0; y <= 4.0; y += 1.0) {
+            vec2 offset = vec2(x, y) * 0.5 * pixelSize;
+            vec2 sampleUv = clamp(lens + offset, 0.0, 1.0);
+            fragColor += texture2D(u_backgroundTexture, sampleUv);
+            total += 1.0;
+          }
         }
-      });
-    }
-  }, [groupRef]);
-
-  if (!screenMesh) {
-    console.error("Screen mesh with 'screen.001' material not found");
-    return null;
-  }
-
-  // Render the hierarchy recursively
-  const renderHierarchy = (hierarchy: NodeStructure): React.ReactNode => {
-    const { node, children } = hierarchy;
-
-    if (node instanceof Mesh) {
-      if (node === screenMesh) {
-        // Custom rendering for the screen node
-        return (
-          <mesh key={node.uuid} castShadow receiveShadow>
-            <Html
-              transform
-              center
-              distanceFactor={0.415}
-              position={node.geometry.boundingBox?.getCenter(new Vector3())}
-              rotation={[Math.PI / 2, Math.PI / 2, 0]}
-              style={{
-                transform: 'rotateY(180deg)',
-              }}
-              contentEditable={false}
-            >
-              <PhoneScreen />
-            </Html>
-            <primitive object={node} />
-          </mesh>
-        );
+        fragColor /= total;
+        
+        // Original lighting
+        float gradient = clamp((clamp(m2.y, 0.0, 0.2) + 0.1) / 2.0, 0.0, 1.0) + 
+                        clamp((clamp(-m2.y, -1000.0, 0.2) * rb3 + 0.1) / 2.0, 0.0, 1.0);
+        vec4 lighting = clamp(fragColor + vec4(rb1) * gradient + vec4(rb2) * 0.3, 0.0, 1.0);
+        
+        // Antialiasing using screen coordinates
+        fragColor = mix(texture2D(u_backgroundTexture, screenUv), lighting, transition);
+      } else {
+        fragColor = texture2D(u_backgroundTexture, screenUv);
       }
-      // Default rendering for other meshes
-      return (
-        <mesh
-          key={node.uuid}
-          geometry={node.geometry}
-          material={node.material}
-          position={node.position}
-          rotation={node.rotation}
-          scale={node.scale}
-          castShadow
-          receiveShadow
-        />
-      );
+      
+      gl_FragColor = fragColor;
     }
-
-    // Render non-mesh nodes and their children
-    return (
-      <group key={node.uuid} position={node.position} rotation={node.rotation} scale={node.scale}>
-        {children.map((child) => renderHierarchy(child))}
-      </group>
-    );
-  };
-
+  `;
+  
+  // Create uniforms
+  const uniforms = useMemo(() => ({
+    u_time: { value: 0 },
+    u_resolution: { value: new THREE.Vector2(size.width, size.height) },
+    u_backgroundTexture: { value: renderTarget.texture },
+  }), [renderTarget, size.width, size.height]);
+  
+  // Update resolution uniform when size changes
+  useEffect(() => {
+    if (uniforms.u_resolution) {
+      uniforms.u_resolution.value.set(size.width, size.height);
+    }
+  }, [size.width, size.height, uniforms]);
+  
+  // Create shader material
+  const shaderMaterial = useMemo(() => {
+    return new THREE.ShaderMaterial({
+      vertexShader,
+      fragmentShader,
+      uniforms,
+      transparent: true,
+      depthTest: true,
+      depthWrite: false,
+      side: THREE.DoubleSide,
+    });
+  }, [vertexShader, fragmentShader, uniforms]);
+  
+  // Clean render-to-texture approach
+  useFrame(() => {
+    if (meshRef.current) {
+      // Store current state
+      const originalRenderTarget = gl.getRenderTarget();
+      const phoneVisible = meshRef.current.visible;
+      
+      // Hide phone and render background
+      meshRef.current.visible = false;
+      gl.setRenderTarget(renderTarget);
+      gl.clear();
+      gl.render(scene, camera);
+      
+      // Restore state
+      gl.setRenderTarget(originalRenderTarget);
+      meshRef.current.visible = phoneVisible;
+    }
+  });
+  
   return (
-    <group ref={groupRef} rotation={[0, Math.PI / 2, 0]}>
-      {nodeHierarchy && renderHierarchy(nodeHierarchy)}
+    <group rotation={[0, 0, 0]} position={[0, 0, 0]}>
+      {/* Glass iPhone shape */}
+      <mesh ref={meshRef} material={shaderMaterial} position={[0, 0, 0]}>
+        <planeGeometry args={[phoneWidth, phoneHeight]} />
+      </mesh>
+      
+      {/* Phone screen overlay */}
+      <Html
+        transform
+        center
+        distanceFactor={0.25}
+        position={[0, 0, 0.01]}
+        rotation={[0, 0, 0]}
+        style={{
+          transform: 'rotateY(0deg)',
+        }}
+        contentEditable={false}
+      >
+
+          <PhoneScreen />
+        
+      </Html>
     </group>
   );
 }

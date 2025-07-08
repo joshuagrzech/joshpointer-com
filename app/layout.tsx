@@ -31,6 +31,15 @@ const RootCanvasClient = dynamic(() => import('@/components/layout/RootCanvasCli
   ),
 });
 
+const PortfolioRouter = dynamic(() => import('@/components/layout/PortfolioRouter'), {
+  ssr: false,
+  loading: () => (
+    <div className="flex items-center justify-center min-h-screen">
+      <div className="animate-pulse">Loading portfolio...</div>
+    </div>
+  ),
+});
+
 const NavigationSync = dynamic(() => import('@/components/layout/NavigationSync'), {
   ssr: false,
   loading: () => null,
@@ -46,90 +55,67 @@ const ThemeToggle = dynamic(() => import('@/components/ui/ThemeToggle'), {
   ),
 });
 
-// Enhanced metadata configuration with improved SEO
-export function generateMetadata(): Metadata {
-  const branding = getBrandingConfig();
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+// Enhanced metadata for better SEO
+const branding = getBrandingConfig();
 
-  return {
-    metadataBase: new URL(baseUrl),
-    title: {
-      template: `%s | ${branding.metadata.title}`,
-      default: branding.metadata.title,
-    },
-    description: branding.metadata.description,
-    manifest: '/manifest.json',
-    applicationName: branding.name,
-    keywords: [
-      'portfolio', 
-      'developer', 
-      'web development', 
-      'React Native', 
-      'iOS', 
-      'mobile development',
-      'software engineer',
-      'frontend developer',
-      'mobile apps'
-    ],
-    authors: [{ name: branding.name }],
-    creator: branding.name,
-    publisher: branding.name,
-    formatDetection: {
-      email: false,
-      address: false,
-      telephone: false,
-    },
-    icons: {
-      icon: [
-        { url: '/favicon.ico', sizes: 'any' },
-        { url: '/icon.svg', type: 'image/svg+xml' },
-      ],
-      apple: [{ url: '/apple-touch-icon.png', sizes: '180x180' }],
-    },
-    openGraph: {
-      title: branding.metadata.title,
-      description: branding.metadata.description,
-      type: 'website',
-      siteName: branding.metadata.title,
-      locale: 'en_US',
-      url: baseUrl,
-      images: [
-        {
-          url: '/og-image.png',
-          width: 1200,
-          height: 630,
-          alt: branding.metadata.title,
-        },
-      ],
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: branding.metadata.title,
-      description: branding.metadata.description,
-      creator: '@yourtwitterhandle',
-      images: ['/og-image.png'],
-    },
-    robots: {
+export const metadata: Metadata = {
+  title: branding.metadata.title,
+  description: branding.metadata.description,
+  keywords: [
+    'mobile developer',
+    'react native',
+    'ios developer',
+    'portfolio',
+    'software engineer',
+    'javascript',
+    'typescript',
+    'swift',
+    'mobile apps'
+  ],
+  authors: [{ name: branding.name }],
+  creator: branding.name,
+  publisher: branding.name,
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
       index: true,
       follow: true,
-      googleBot: {
-        index: true,
-        follow: true,
-        'max-video-preview': -1,
-        'max-image-preview': 'large',
-        'max-snippet': -1,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  openGraph: {
+    title: branding.metadata.title,
+    description: branding.metadata.description,
+    url: 'https://joshpointer.com',
+    siteName: branding.name,
+    locale: 'en_US',
+    type: 'website',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: `${branding.name} - ${branding.tagline}`,
       },
-    },
-    verification: {
-      google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
-    },
-    alternates: {
-      canonical: baseUrl,
-    },
-    category: 'technology',
-    classification: 'portfolio',
-  };
-}
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: branding.metadata.title,
+    description: branding.metadata.description,
+    creator: '@joshpointer',
+    images: ['/og-image.png'],
+  },
+  verification: {
+    google: 'your-google-verification-code',
+  },
+  alternates: {
+    canonical: 'https://joshpointer.com',
+  },
+};
 
 // Enhanced viewport configuration with improved mobile support
 export const viewport: Viewport = {
@@ -195,14 +181,14 @@ export default function RootLayout() {
             </Suspense>
 
             <main className="relative w-full h-screen">
-              {/* Full screen canvas with GPU acceleration */}
+              {/* Responsive portfolio with progressive enhancement */}
               <div 
                 className="fixed inset-0 w-full h-full" 
                 style={{ zIndex: 0 }}
                 aria-hidden="true"
               >
                 <Suspense fallback={<div />}>
-                  <RootCanvasClient />
+                  <PortfolioRouter />
                 </Suspense>
               </div>
             </main>

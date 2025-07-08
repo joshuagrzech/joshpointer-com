@@ -108,7 +108,7 @@ export default function PhoneScreen() {
 
   return (
     <div
-      className={`relative text-white rounded-[110px] overflow-hidden bg-secondary/50 ${
+      className={`relative text-white rounded-[110px] overflow-hidden ${
         !appState.isOpen
           ? 'w-[746px] h-[1594px]'
           : isMobile
