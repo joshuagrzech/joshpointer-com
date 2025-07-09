@@ -1,0 +1,442 @@
+{
+  "theme": {
+    "colors": {
+      "light": {
+        "background": "0 0% 100%",
+        "foreground": "240 10% 3.9%",
+        "card": "0 0% 100%",
+        "card-foreground": "240 10% 3.9%",
+        "popover": "0 0% 100%",
+        "popover-foreground": "240 10% 3.9%",
+        "primary": "240 5.9% 10%",
+        "primary-foreground": "0 0% 98%",
+        "secondary": "240 4.8% 95.9%",
+        "secondary-foreground": "240 5.9% 10%",
+        "muted": "240 4.8% 95.9%",
+        "muted-foreground": "240 3.8% 46.1%",
+        "accent": "240 4.8% 95.9%",
+        "accent-foreground": "240 5.9% 10%",
+        "destructive": "0 84.2% 60.2%",
+        "destructive-foreground": "0 0% 98%",
+        "border": "240 5.9% 90%",
+        "input": "240 5.9% 90%",
+        "ring": "240 10% 3.9%"
+      },
+      "dark": {
+        "background": "240 10% 3.9%",
+        "foreground": "0 0% 98%",
+        "card": "240 10% 3.9%",
+        "card-foreground": "0 0% 98%",
+        "popover": "240 10% 3.9%",
+        "popover-foreground": "0 0% 98%",
+        "primary": "0 0% 98%",
+        "primary-foreground": "240 5.9% 10%",
+        "secondary": "240 3.7% 15.9%",
+        "secondary-foreground": "0 0% 98%",
+        "muted": "240 3.7% 15.9%",
+        "muted-foreground": "240 5% 64.9%",
+        "accent": "240 3.7% 15.9%",
+        "accent-foreground": "0 0% 98%",
+        "destructive": "0 62.8% 30.6%",
+        "destructive-foreground": "0 0% 98%",
+        "border": "240 3.7% 15.9%",
+        "input": "240 3.7% 15.9%",
+        "ring": "240 4.9% 83.9%"
+      },
+      "chart": {
+        "1": "12 76% 61%",
+        "2": "173 58% 39%",
+        "3": "197 37% 24%",
+        "4": "43 74% 66%",
+        "5": "27 87% 67%"
+      }
+    },
+    "radius": {
+      "default": "0.5rem",
+      "sm": "calc(0.5rem - 4px)",
+      "md": "calc(0.5rem - 2px)",
+      "lg": "0.5rem"
+    },
+    "animation": {
+      "framerMotion": {
+        "default": {
+          "duration": 0.3,
+          "ease": [0.4, 0, 0.2, 1]
+        },
+        "slow": {
+          "duration": 0.5,
+          "ease": [0.4, 0, 0.2, 1]
+        },
+        "spring": {
+          "type": "spring",
+          "stiffness": 170,
+          "damping": 26
+        }
+      },
+      "reactSpring": {
+        "default": {
+          "mass": 1,
+          "tension": 170,
+          "friction": 26
+        },
+        "slow": {
+          "mass": 1,
+          "tension": 120,
+          "friction": 30
+        }
+      },
+      "timing": {
+        "fast": 0.2,
+        "default": 0.3,
+        "slow": 0.5
+      },
+      "easings": {
+        "default": [0.4, 0, 0.2, 1],
+        "easeOut": [0, 0, 0.2, 1],
+        "easeIn": [0.4, 0, 1, 1]
+      }
+    },
+    "fonts": {
+      "custom": [
+        {
+          "family": "Inter",
+          "url": "/fonts/Inter-Regular.woff2",
+          "weight": 400,
+          "style": "normal"
+        },
+        {
+          "family": "Inter",
+          "url": "/fonts/Inter-Medium.woff2",
+          "weight": 500,
+          "style": "normal"
+        },
+        {
+          "family": "Inter",
+          "url": "/fonts/Inter-SemiBold.woff2",
+          "weight": 600,
+          "style": "normal"
+        },
+        {
+          "family": "Inter",
+          "url": "/fonts/Inter-Bold.woff2",
+          "weight": 700,
+          "style": "normal"
+        }
+      ],
+      "variables": {
+        "sans": "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
+        "mono": "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
+        "heading": "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif"
+      }
+    }
+  },
+  "branding": {
+    "name": "Josh Pointer",
+    "tagline": "Senior Mobile Software Engineer",
+    "description": "Crafting exceptional mobile experiences with React Native & iOS. 5+ years building scalable, performant mobile applications that users love.",
+    "logo": "/logo.png",
+    "favicon": "/favicon.ico",
+    "metadata": {
+      "title": "Josh Pointer - Senior Mobile Software Engineer",
+      "description": "React Native & iOS Developer with 5+ years experience building scalable mobile applications",
+      "language": "en"
+    }
+  },
+  "ui": {
+    "buttons": {
+      "variants": {
+        "default": "bg-primary text-primary-foreground shadow hover:bg-primary/90",
+        "destructive": "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
+        "outline": "border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground",
+        "secondary": "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
+        "ghost": "hover:bg-accent hover:text-accent-foreground",
+        "link": "text-primary underline-offset-4 hover:underline"
+      },
+      "sizes": {
+        "default": "h-9 px-4 py-2",
+        "sm": "h-8 rounded-md px-3 text-xs",
+        "lg": "h-10 rounded-md px-8",
+        "icon": "h-9 w-9"
+      }
+    },
+    "badges": {
+      "variants": {
+        "default": "border-transparent bg-primary text-primary-foreground shadow hover:bg-primary/80",
+        "secondary": "border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80",
+        "destructive": "border-transparent bg-destructive text-destructive-foreground shadow hover:bg-destructive/80",
+        "outline": "text-foreground"
+      }
+    }
+  },
+  "navigation": [
+    { "id": "home", "label": "Home", "icon": "home" },
+    { "id": "about", "label": "About", "icon": "user" },
+    { "id": "projects", "label": "Projects", "icon": "folder" },
+    { "id": "skills", "label": "Skills", "icon": "wrench" },
+    { "id": "blog", "label": "Blog", "icon": "book" },
+    { "id": "links", "label": "Links", "icon": "link" },
+    { "id": "contact", "label": "Contact", "icon": "mail" }
+  ],
+  "hero": {
+    "title": "Senior Mobile Software Engineer",
+    "subtitle": "Crafting exceptional mobile experiences with React Native & iOS. 5+ years building scalable, performant mobile applications that users love."
+  },
+  "about": {
+    "title": "About Me",
+    "content": "I'm a passionate mobile developer with over 5 years of experience specializing in React Native and iOS development. I've led the development of multiple high-impact mobile applications, from concept to App Store deployment. My expertise includes building scalable architectures, implementing complex animations, optimizing app performance, and mentoring junior developers. I'm driven by creating intuitive user experiences and writing clean, maintainable code that stands the test of time."
+  },
+  "process": {
+    "title": "Development Process",
+    "steps": [
+      {
+        "title": "Discovery & Planning",
+        "description": "Deep dive into requirements, user research, and technical architecture planning.",
+        "icon": "lightbulb"
+      },
+      {
+        "title": "Design & Prototype",
+        "description": "Create wireframes, design systems, and interactive prototypes for validation.",
+        "icon": "palette"
+      },
+      {
+        "title": "Development",
+        "description": "Build with clean architecture, performance optimization, and comprehensive testing.",
+        "icon": "code"
+      },
+      {
+        "title": "Testing & QA",
+        "description": "Rigorous testing across devices, performance profiling, and user acceptance testing.",
+        "icon": "check"
+      },
+      {
+        "title": "Deployment & Monitoring",
+        "description": "App Store deployment, CI/CD pipeline setup, and production monitoring.",
+        "icon": "rocket"
+      }
+    ]
+  },
+  "testimonials": {
+    "title": "Client & Colleague Testimonials",
+    "items": [
+      {
+        "content": "Josh consistently delivers exceptional mobile applications. His deep understanding of React Native and iOS development, combined with his attention to performance and user experience, makes him an invaluable team member.",
+        "author": "Sarah Chen",
+        "role": "Senior Product Manager",
+        "company": "TechFlow Solutions"
+      },
+      {
+        "content": "Working with Josh was a game-changer for our mobile strategy. He not only built a robust React Native app but also mentored our team on best practices and helped us establish a solid mobile development foundation.",
+        "author": "Michael Rodriguez",
+        "role": "CTO",
+        "company": "InnovateMobile"
+      },
+      {
+        "content": "Josh's technical expertise and ability to solve complex mobile challenges is outstanding. He transformed our iOS app performance and user experience, resulting in a 40% increase in user engagement.",
+        "author": "Emily Watson",
+        "role": "Engineering Lead",
+        "company": "MobileFirst Inc"
+      }
+    ]
+  },
+  "projects": {
+    "title": "Featured Projects",
+    "description": "A selection of mobile applications I've built, showcasing my expertise in React Native, iOS development, and mobile architecture.",
+    "items": [
+      {
+        "title": "HealthTrack Pro",
+        "description": "A comprehensive health and fitness tracking app built with React Native. Features include real-time biometric monitoring, personalized workout plans, and social sharing capabilities. Integrated with Apple HealthKit and Google Fit APIs.",
+        "tags": ["React Native", "TypeScript", "Redux Toolkit", "HealthKit", "Firebase", "Jest"],
+        "github": "https://github.com/joshpointer/healthtrack-pro",
+        "url": "https://apps.apple.com/app/healthtrack-pro",
+        "metrics": {
+          "downloads": "50K+",
+          "rating": "4.8/5",
+          "users": "25K+ active"
+        }
+      },
+      {
+        "title": "EcoDelivery",
+        "description": "A sustainable food delivery platform with real-time tracking, carbon footprint calculation, and eco-friendly restaurant partnerships. Built with React Native and integrated with mapping APIs and payment systems.",
+        "tags": ["React Native", "Swift", "Google Maps API", "Stripe", "Socket.io", "MongoDB"],
+        "github": "https://github.com/joshpointer/ecodelivery",
+        "url": "https://apps.apple.com/app/ecodelivery",
+        "metrics": {
+          "downloads": "100K+",
+          "rating": "4.6/5",
+          "users": "45K+ active"
+        }
+      },
+      {
+        "title": "FinFlow",
+        "description": "A personal finance management app with AI-powered spending insights, budget tracking, and investment portfolio management. Features secure biometric authentication and real-time market data integration.",
+        "tags": ["React Native", "iOS (Swift)", "TensorFlow Lite", "Plaid API", "AWS", "GraphQL"],
+        "github": "https://github.com/joshpointer/finflow",
+        "url": "https://apps.apple.com/app/finflow",
+        "metrics": {
+          "downloads": "75K+",
+          "rating": "4.7/5",
+          "users": "35K+ active"
+        }
+      },
+      {
+        "title": "TaskMaster",
+        "description": "A productivity app with advanced task management, team collaboration, and AI-powered project insights. Features include real-time sync, offline support, and integration with popular productivity tools.",
+        "tags": [
+          "React Native",
+          "TypeScript",
+          "Realm Database",
+          "Push Notifications",
+          "AWS S3",
+          "Jest"
+        ],
+        "github": "https://github.com/joshpointer/taskmaster",
+        "url": "https://apps.apple.com/app/taskmaster",
+        "metrics": {
+          "downloads": "200K+",
+          "rating": "4.9/5",
+          "users": "120K+ active"
+        }
+      }
+    ]
+  },
+  "skills": {
+    "title": "Technical Skills",
+    "description": "My expertise spans mobile development, with deep knowledge of React Native, iOS development, and modern mobile architecture patterns.",
+    "categories": [
+      {
+        "name": "Mobile Development",
+        "items": [
+          "React Native",
+          "iOS (Swift/SwiftUI)",
+          "Android (Kotlin)",
+          "TypeScript",
+          "JavaScript",
+          "Expo"
+        ]
+      },
+      {
+        "name": "State Management & Architecture",
+        "items": [
+          "Redux Toolkit",
+          "Zustand",
+          "Context API",
+          "MVC/MVVM",
+          "Clean Architecture",
+          "SOLID Principles"
+        ]
+      },
+      {
+        "name": "Performance & Optimization",
+        "items": [
+          "React Native Performance",
+          "iOS Performance",
+          "Memory Management",
+          "Bundle Optimization",
+          "Image Optimization",
+          "Lazy Loading"
+        ]
+      },
+      {
+        "name": "Testing & Quality",
+        "items": [
+          "Jest",
+          "React Native Testing Library",
+          "Detox E2E",
+          "iOS Unit Testing",
+          "CI/CD",
+          "Code Coverage"
+        ]
+      },
+      {
+        "name": "Backend & APIs",
+        "items": ["Node.js", "Express", "GraphQL", "REST APIs", "Firebase", "AWS Services"]
+      },
+      {
+        "name": "Tools & DevOps",
+        "items": [
+          "Git",
+          "GitHub Actions",
+          "Fastlane",
+          "CocoaPods",
+          "npm/yarn",
+          "Xcode",
+          "Android Studio"
+        ]
+      }
+    ]
+  },
+  "blog": {
+    "title": "Latest Articles",
+    "posts": [
+      {
+        "title": "Building High-Performance React Native Apps: A Complete Guide",
+        "excerpt": "Learn the essential techniques for optimizing React Native app performance, from bundle size reduction to memory management and rendering optimization.",
+        "date": "2024-01-15",
+        "readTime": "8 min read",
+        "tags": ["React Native", "Performance", "Mobile Development"]
+      },
+      {
+        "title": "SwiftUI vs React Native: When to Choose Each for Your Mobile Project",
+        "excerpt": "A comprehensive comparison of SwiftUI and React Native, exploring their strengths, limitations, and ideal use cases for different project requirements.",
+        "date": "2024-01-08",
+        "readTime": "12 min read",
+        "tags": ["SwiftUI", "React Native", "iOS", "Mobile Development"]
+      },
+      {
+        "title": "Implementing Advanced Animations in React Native with Reanimated 3",
+        "excerpt": "Deep dive into React Native Reanimated 3, covering gesture handling, shared element transitions, and creating smooth, native-like animations.",
+        "date": "2023-12-20",
+        "readTime": "10 min read",
+        "tags": ["React Native", "Animations", "Reanimated", "Mobile Development"]
+      },
+      {
+        "title": "Mobile App Security Best Practices: Protecting User Data in 2024",
+        "excerpt": "Essential security practices for mobile app development, covering data encryption, secure API communication, and protecting against common vulnerabilities.",
+        "date": "2023-12-10",
+        "readTime": "15 min read",
+        "tags": ["Security", "Mobile Development", "iOS", "React Native"]
+      }
+    ]
+  },
+  "links": [
+    {
+      "title": "GitHub",
+      "url": "https://github.com/joshpointer",
+      "icon": "github"
+    },
+    {
+      "title": "LinkedIn",
+      "url": "https://linkedin.com/in/joshpointer",
+      "icon": "linkedin"
+    },
+    {
+      "title": "Twitter",
+      "url": "https://twitter.com/joshpointer",
+      "icon": "twitter"
+    },
+    {
+      "title": "Email",
+      "url": "mailto:josh@joshpointer.com",
+      "icon": "mail"
+    },
+    {
+      "title": "App Store",
+      "url": "https://apps.apple.com/developer/josh-pointer",
+      "icon": "smartphone"
+    },
+    {
+      "title": "Resume",
+      "url": "https://joshpointer.com/resume.pdf",
+      "icon": "file-text"
+    }
+  ],
+  "contact": {
+    "title": "Let's Build Something Amazing",
+    "description": "I'm passionate about creating exceptional mobile experiences. Whether you have a project in mind or want to discuss mobile development opportunities, I'd love to hear from you.",
+    "email": "josh@joshpointer.com",
+    "availability": "Available for new opportunities and freelance projects"
+  },
+  "footer": {
+    "text": "© 2024 Josh Pointer. Crafted with React Native, iOS, and a lot of ☕"
+  }
+}
