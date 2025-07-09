@@ -6,6 +6,7 @@ import { Suspense } from 'react';
 import { getBrandingConfig } from '@/lib/config';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
+import { TransparencyProvider } from '@/components/ui/TransparencyToggle';
 
 // Dynamic imports with loading states and chunking
 const ScrollProgress = dynamic(
@@ -55,6 +56,16 @@ const ThemeToggle = dynamic(() => import('@/components/ui/ThemeToggle'), {
   ),
 });
 
+const TransparencyToggle = dynamic(() => import('@/components/ui/TransparencyToggle'), {
+  ssr: false,
+  loading: () => (
+    <div
+      className="w-10 h-10 rounded-full bg-gray-200 animate-pulse"
+      aria-label="Loading transparency toggle"
+    />
+  ),
+});
+
 // Enhanced metadata for better SEO
 const branding = getBrandingConfig();
 
@@ -70,7 +81,7 @@ export const metadata: Metadata = {
     'javascript',
     'typescript',
     'swift',
-    'mobile apps'
+    'mobile apps',
   ],
   authors: [{ name: branding.name }],
   creator: branding.name,
@@ -134,7 +145,7 @@ export const viewport: Viewport = {
 // Enhanced loading fallback with better accessibility
 function LoadingFallback() {
   return (
-    <div 
+    <div
       className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800"
       role="status"
       aria-label="Loading portfolio"
@@ -149,16 +160,30 @@ function LoadingFallback() {
 
 export default function RootLayout() {
   return (
-    <html 
-      lang="en" 
-      suppressHydrationWarning 
-      className="antialiased scroll-smooth"
-    >
+    <html lang="en" suppressHydrationWarning className="antialiased scroll-smooth">
       <head>
         {/* Preload critical resources */}
-        <link rel="preload" href="/fonts/Inter-Regular.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
-        <link rel="preload" href="/fonts/Inter-Medium.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
-        <link rel="preload" href="/fonts/Inter-Bold.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+        <link
+          rel="preload"
+          href="/fonts/Inter-Regular.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
+          href="/fonts/Inter-Medium.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
+          href="/fonts/Inter-Bold.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
         <link rel="dns-prefetch" href="//fonts.googleapis.com" />
         <link rel="dns-prefetch" href="//fonts.gstatic.com" />
       </head>
@@ -166,33 +191,39 @@ export default function RootLayout() {
       <SpeedInsights />
       <body className="overflow-x-hidden">
         <Suspense fallback={<LoadingFallback />}>
-          <Providers>
-            {/* Navigation and UI Elements with improved loading states */}
-            <Suspense fallback={null}>
-              <NavigationSync />
-            </Suspense>
+          <TransparencyProvider>
+            <Providers>
+              {/* Navigation and UI Elements with improved loading states */}
+              <Suspense fallback={null}>
+                <NavigationSync />
+              </Suspense>
 
-            <Suspense fallback={<div />}>
-              <ScrollProgress />
-            </Suspense>
+              <Suspense fallback={<div />}>
+                <ScrollProgress />
+              </Suspense>
 
-            <Suspense fallback={<div />}>
-              <ThemeToggle route={'home'} />
-            </Suspense>
+              <Suspense fallback={<div />}>
+                <ThemeToggle route={'home'} />
+              </Suspense>
 
-            <main className="relative w-full h-screen">
-              {/* Responsive portfolio with progressive enhancement */}
-              <div 
-                className="fixed inset-0 w-full h-full" 
-                style={{ zIndex: 0 }}
-                aria-hidden="true"
-              >
-                <Suspense fallback={<div />}>
-                  <PortfolioRouter />
-                </Suspense>
-              </div>
-            </main>
-          </Providers>
+              <Suspense fallback={<div />}>
+                <TransparencyToggle route={'home'} />
+              </Suspense>
+
+              <main className="relative w-full h-screen">
+                {/* Responsive portfolio with progressive enhancement */}
+                <div
+                  className="fixed inset-0 w-full h-full"
+                  style={{ zIndex: 0 }}
+                  aria-hidden="true"
+                >
+                  <Suspense fallback={<div />}>
+                    <PortfolioRouter />
+                  </Suspense>
+                </div>
+              </main>
+            </Providers>
+          </TransparencyProvider>
         </Suspense>
       </body>
     </html>

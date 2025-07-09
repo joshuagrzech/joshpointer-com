@@ -11,16 +11,12 @@ const RootCanvasClient = dynamic(() => import('@/components/layout/RootCanvasCli
   ssr: false,
 });
 
-const MobilePortfolio = dynamic(() => import('@/components/layout/MobilePortfolio'), {
-  ssr: false,
-});
-
 export default function PortfolioRouter() {
   const { width, height } = useWindowSize();
   const isMobile = useIsMobile();
   const [forceDesktop, setForceDesktop] = useState(false);
   const [hasWebGL, setHasWebGL] = useState(true);
-  
+
   // Check WebGL support
   useEffect(() => {
     const canvas = document.createElement('canvas');
@@ -36,7 +32,7 @@ export default function PortfolioRouter() {
   //   return (
   //     <div className="relative">
   //       <MobilePortfolio />
-        
+
   //       {/* Option to switch to desktop mode */}
   //       {hasWebGL && (
   //         <Button
@@ -57,7 +53,7 @@ export default function PortfolioRouter() {
   return (
     <div className="relative">
       <RootCanvasClient />
-      
+
       {/* Option to switch to mobile mode */}
       <Button
         onClick={() => setForceDesktop(false)}
@@ -70,4 +66,4 @@ export default function PortfolioRouter() {
       </Button>
     </div>
   );
-} 
+}

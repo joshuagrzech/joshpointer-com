@@ -87,20 +87,24 @@ const nextConfig = {
           key: 'Permissions-Policy',
           value: 'camera=(), microphone=(), geolocation=()'
         },
-        // Performance headers
+        // Development-friendly cache headers
         {
           key: 'Cache-Control',
-          value: 'public, max-age=31536000, immutable'
+          value: process.env.NODE_ENV === 'development' 
+            ? 'no-cache, no-store, must-revalidate' 
+            : 'public, max-age=31536000, immutable'
         },
       ],
     },
-    // Cache static assets
+    // Cache static assets with development exceptions
     {
       source: '/fonts/:path*',
       headers: [
         {
           key: 'Cache-Control',
-          value: 'public, max-age=31536000, immutable'
+          value: process.env.NODE_ENV === 'development' 
+            ? 'no-cache, no-store, must-revalidate' 
+            : 'public, max-age=31536000, immutable'
         }
       ],
     },
@@ -109,7 +113,9 @@ const nextConfig = {
       headers: [
         {
           key: 'Cache-Control',
-          value: 'public, max-age=31536000, immutable'
+          value: process.env.NODE_ENV === 'development' 
+            ? 'no-cache, no-store, must-revalidate' 
+            : 'public, max-age=31536000, immutable'
         }
       ],
     },
@@ -122,6 +128,18 @@ const nextConfig = {
   swcMinify: true,
   // Enable webpack optimizations
   webpack: (config, { dev, isServer }) => {
+    // Development-specific optimizations
+    if (dev) {
+      // Disable caching for development
+      config.cache = false;
+      
+      // Add hot reload optimizations for Three.js
+      config.module.rules.push({
+        test: /\.(glsl|vs|fs|vert|frag)$/,
+        type: 'asset/source',
+      });
+    }
+    
     // Optimize for production
     if (!dev && !isServer) {
       config.optimization = {
