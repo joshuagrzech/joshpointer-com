@@ -1,152 +1,161 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import { Loader2, AlertCircle, Wifi, WifiOff } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect } from 'react';
+import LoadingSpinner from './LoadingSpinner';
 
 interface LoadingStateProps {
-  type?: 'loading' | 'error' | 'offline' | 'webgl-unsupported';
-  message?: string;
-  onRetry?: () => void;
-  progress?: number;
+  isLoading: boolean;
+  children: React.ReactNode;
+  fallback?: React.ReactNode;
+  delay?: number;
+  minDuration?: number;
+  showProgress?: boolean;
+  progressSteps?: string[];
+  onComplete?: () => void;
 }
 
-export default function LoadingState({ 
-  type = 'loading', 
-  message, 
-  onRetry,
-  progress 
+export default function LoadingState({
+  isLoading,
+  children,
+  fallback,
+  delay = 200,
+  minDuration = 500,
+  showProgress = false,
+  progressSteps = [],
+  onComplete,
 }: LoadingStateProps) {
-  const getContent = () => {
-    switch (type) {
-      case 'error':
-        return {
-          icon: <AlertCircle className="w-12 h-12 text-destructive" />,
-          title: "Something went wrong",
-          description: message || "We encountered an error loading the portfolio. Please try again.",
-          showRetry: true
-        };
-      
-      case 'offline':
-        return {
-          icon: <WifiOff className="w-12 h-12 text-muted-foreground" />,
-          title: "You're offline",
-          description: "Please check your internet connection and try again.",
-          showRetry: true
-        };
-      
-      case 'webgl-unsupported':
-        return {
-          icon: <AlertCircle className="w-12 h-12 text-warning" />,
-          title: "WebGL not supported",
-          description: "Your browser doesn't support 3D graphics. You'll see a simplified version of the portfolio.",
-          showRetry: false
-        };
-      
-      default:
-        return {
-          icon: <Loader2 className="w-12 h-12 animate-spin text-primary" />,
-          title: "Loading portfolio...",
-          description: message || "Please wait while we prepare your experience.",
-          showRetry: false
-        };
+  const [shouldShow, setShouldShow] = useState(false);
+  const [startTime, setStartTime] = useState<number | null>(null);
+  const [currentStep, setCurrentStep] = useState(0);
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    if (isLoading) {
+      setStartTime(Date.now());
+      const timer = setTimeout(() => setShouldShow(true), delay);
+      return () => clearTimeout(timer);
+    } else {
+      const elapsed = startTime ? Date.now() - startTime : 0;
+      const remaining = Math.max(0, minDuration - elapsed);
+
+      setTimeout(() => {
+        setShouldShow(false);
+        setProgress(0);
+        setCurrentStep(0);
+        onComplete?.();
+      }, remaining);
     }
-  };
+  }, [isLoading, delay, minDuration, startTime, onComplete]);
 
-  const content = getContent();
+  // Simulate progress steps
+  useEffect(() => {
+    if (shouldShow && showProgress && progressSteps.length > 0) {
+      const interval = setInterval(() => {
+        setCurrentStep((prev) => {
+          const next = prev + 1;
+          if (next >= progressSteps.length) {
+            clearInterval(interval);
+            return prev;
+          }
+          setProgress((next / progressSteps.length) * 100);
+          return next;
+        });
+      }, 800);
 
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-background p-4">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="text-center max-w-md"
-      >
-        <motion.div
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-          className="flex justify-center mb-6"
-        >
-          {content.icon}
-        </motion.div>
-        
-        <motion.h2
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3 }}
-          className="text-2xl font-semibold mb-2"
-        >
-          {content.title}
-        </motion.h2>
-        
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.4 }}
-          className="text-muted-foreground mb-6"
-        >
-          {content.description}
-        </motion.p>
-        
-        {progress !== undefined && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-            className="mb-6"
-          >
-            <div className="w-full bg-muted rounded-full h-2">
-              <motion.div
-                initial={{ width: 0 }}
-                animate={{ width: `${progress}%` }}
-                transition={{ duration: 0.3 }}
-                className="bg-primary h-2 rounded-full"
-              />
+      return () => clearInterval(interval);
+    }
+  }, [shouldShow, showProgress, progressSteps]);
+
+  const defaultFallback = (
+    <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center">
+      <div className="bg-card border rounded-lg p-8 shadow-lg max-w-sm w-full mx-4">
+        <div className="text-center space-y-4">
+          <LoadingSpinner size="lg" />
+
+          {showProgress && progressSteps.length > 0 && (
+            <div className="space-y-3">
+              <div className="w-full bg-secondary rounded-full h-2">
+                <motion.div
+                  className="bg-primary h-2 rounded-full"
+                  initial={{ width: 0 }}
+                  animate={{ width: `${progress}%` }}
+                  transition={{ duration: 0.3 }}
+                />
+              </div>
+
+              <div className="text-sm text-muted-foreground">
+                {progressSteps[currentStep] || 'Loading...'}
+              </div>
+
+              <div className="text-xs text-muted-foreground">{Math.round(progress)}% complete</div>
             </div>
-            <p className="text-sm text-muted-foreground mt-2">{Math.round(progress)}% complete</p>
-          </motion.div>
-        )}
-        
-        {content.showRetry && onRetry && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.6 }}
-          >
-            <Button onClick={onRetry} variant="outline">
-              Try Again
-            </Button>
-          </motion.div>
-        )}
-        
-        {/* Subtle loading animation dots */}
-        {type === 'loading' && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.7 }}
-            className="flex justify-center gap-1 mt-4"
-          >
-            {[0, 1, 2].map((i) => (
-              <motion.div
-                key={i}
-                animate={{
-                  y: [0, -8, 0],
-                  opacity: [0.4, 1, 0.4]
-                }}
-                transition={{
-                  duration: 1.2,
-                  repeat: Infinity,
-                  delay: i * 0.2
-                }}
-                className="w-2 h-2 bg-primary rounded-full"
-              />
-            ))}
-          </motion.div>
-        )}
-      </motion.div>
+          )}
+
+          {!showProgress && (
+            <div className="text-sm text-muted-foreground">Loading your experience...</div>
+          )}
+        </div>
+      </div>
     </div>
   );
-} 
+
+  return (
+    <>
+      <AnimatePresence mode="wait">
+        {shouldShow && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            {fallback || defaultFallback}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence mode="wait">
+        {!shouldShow && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            {children}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  );
+}
+
+// Specialized loading components
+export function SkeletonLoader({ className = 'h-4 bg-muted rounded' }: { className?: string }) {
+  return <div className={`animate-pulse ${className}`} />;
+}
+
+export function CardSkeleton() {
+  return (
+    <div className="space-y-3">
+      <SkeletonLoader className="h-6 bg-muted rounded w-3/4" />
+      <SkeletonLoader className="h-4 bg-muted rounded w-full" />
+      <SkeletonLoader className="h-4 bg-muted rounded w-2/3" />
+    </div>
+  );
+}
+
+export function GridSkeleton({ rows = 3, cols = 2 }: { rows?: number; cols?: number }) {
+  return (
+    <div className="grid gap-4" style={{ gridTemplateColumns: `repeat(${cols}, 1fr)` }}>
+      {Array.from({ length: rows * cols }).map((_, i) => (
+        <div key={i} className="bg-card border rounded-lg p-4 space-y-3">
+          <SkeletonLoader className="h-5 bg-muted rounded w-1/2" />
+          <SkeletonLoader className="h-4 bg-muted rounded w-full" />
+          <SkeletonLoader className="h-4 bg-muted rounded w-3/4" />
+        </div>
+      ))}
+    </div>
+  );
+}

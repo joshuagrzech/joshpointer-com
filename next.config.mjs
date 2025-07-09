@@ -35,14 +35,10 @@ const nextConfig = {
     optimizePackageImports: ['lucide-react', 'framer-motion', '@react-three/drei'],
     // Improved bundling
     serverActions: {
-      bodySizeLimit: '2mb'
+      bodySizeLimit: '2mb',
     },
     // Enable modern JavaScript features
     serverComponentsExternalPackages: ['sharp'],
-    // Optimize fonts
-    fontLoaders: [
-      { loader: '@next/font/google' },
-    ],
     // Enable webpack optimizations
     webpackBuildWorker: true,
     // Enable turbo for faster builds
@@ -54,6 +50,8 @@ const nextConfig = {
         },
       },
     },
+    // Enable SWC minification
+    swcMinify: true,
   },
   eslint: {
     ignoreDuringBuilds: true,
@@ -65,34 +63,35 @@ const nextConfig = {
       headers: [
         {
           key: 'X-DNS-Prefetch-Control',
-          value: 'on'
+          value: 'on',
         },
         {
           key: 'Strict-Transport-Security',
-          value: 'max-age=31536000; includeSubDomains'
+          value: 'max-age=31536000; includeSubDomains',
         },
         {
           key: 'X-Frame-Options',
-          value: 'SAMEORIGIN'
+          value: 'SAMEORIGIN',
         },
         {
           key: 'X-Content-Type-Options',
-          value: 'nosniff'
+          value: 'nosniff',
         },
         {
           key: 'Referrer-Policy',
-          value: 'strict-origin-when-cross-origin'
+          value: 'strict-origin-when-cross-origin',
         },
         {
           key: 'Permissions-Policy',
-          value: 'camera=(), microphone=(), geolocation=()'
+          value: 'camera=(), microphone=(), geolocation=()',
         },
         // Development-friendly cache headers
         {
           key: 'Cache-Control',
-          value: process.env.NODE_ENV === 'development' 
-            ? 'no-cache, no-store, must-revalidate' 
-            : 'public, max-age=31536000, immutable'
+          value:
+            process.env.NODE_ENV === 'development'
+              ? 'no-cache, no-store, must-revalidate'
+              : 'public, max-age=31536000, immutable',
         },
       ],
     },
@@ -102,10 +101,11 @@ const nextConfig = {
       headers: [
         {
           key: 'Cache-Control',
-          value: process.env.NODE_ENV === 'development' 
-            ? 'no-cache, no-store, must-revalidate' 
-            : 'public, max-age=31536000, immutable'
-        }
+          value:
+            process.env.NODE_ENV === 'development'
+              ? 'no-cache, no-store, must-revalidate'
+              : 'public, max-age=31536000, immutable',
+        },
       ],
     },
     {
@@ -113,10 +113,11 @@ const nextConfig = {
       headers: [
         {
           key: 'Cache-Control',
-          value: process.env.NODE_ENV === 'development' 
-            ? 'no-cache, no-store, must-revalidate' 
-            : 'public, max-age=31536000, immutable'
-        }
+          value:
+            process.env.NODE_ENV === 'development'
+              ? 'no-cache, no-store, must-revalidate'
+              : 'public, max-age=31536000, immutable',
+        },
       ],
     },
   ],
@@ -132,14 +133,14 @@ const nextConfig = {
     if (dev) {
       // Disable caching for development
       config.cache = false;
-      
+
       // Add hot reload optimizations for Three.js
       config.module.rules.push({
         test: /\.(glsl|vs|fs|vert|frag)$/,
         type: 'asset/source',
       });
     }
-    
+
     // Optimize for production
     if (!dev && !isServer) {
       config.optimization = {
@@ -158,11 +159,26 @@ const nextConfig = {
               chunks: 'all',
               priority: 10,
             },
+            framer: {
+              test: /[\\/]node_modules[\\/]framer-motion[\\/]/,
+              name: 'framer',
+              chunks: 'all',
+              priority: 10,
+            },
+            lucide: {
+              test: /[\\/]node_modules[\\/]lucide-react[\\/]/,
+              name: 'lucide',
+              chunks: 'all',
+              priority: 10,
+            },
           },
         },
+        // Enable tree shaking
+        usedExports: true,
+        sideEffects: false,
       };
     }
-    
+
     return config;
   },
 };

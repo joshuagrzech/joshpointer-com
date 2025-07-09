@@ -70,7 +70,11 @@ const TransparencyToggle = dynamic(() => import('@/components/ui/TransparencyTog
 const branding = getBrandingConfig();
 
 export const metadata: Metadata = {
-  title: branding.metadata.title,
+  metadataBase: new URL('https://joshpointer.com'),
+  title: {
+    default: branding.metadata.title,
+    template: `%s | ${branding.name}`,
+  },
   description: branding.metadata.description,
   keywords: [
     'mobile developer',
@@ -82,10 +86,21 @@ export const metadata: Metadata = {
     'typescript',
     'swift',
     'mobile apps',
+    'three.js',
+    'webgl',
+    '3d graphics',
+    'interactive portfolio',
+    'frontend developer',
+    'full stack developer',
   ],
-  authors: [{ name: branding.name }],
+  authors: [{ name: branding.name, url: 'https://joshpointer.com' }],
   creator: branding.name,
   publisher: branding.name,
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
   robots: {
     index: true,
     follow: true,
@@ -98,33 +113,58 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: 'https://joshpointer.com',
     title: branding.metadata.title,
     description: branding.metadata.description,
-    url: 'https://joshpointer.com',
     siteName: branding.name,
-    locale: 'en_US',
-    type: 'website',
     images: [
       {
         url: '/og-image.png',
         width: 1200,
         height: 630,
         alt: `${branding.name} - ${branding.tagline}`,
+        type: 'image/png',
+      },
+      {
+        url: '/og-image-square.png',
+        width: 600,
+        height: 600,
+        alt: `${branding.name} - ${branding.tagline}`,
+        type: 'image/png',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
+    site: '@joshpointer',
+    creator: '@joshpointer',
     title: branding.metadata.title,
     description: branding.metadata.description,
-    creator: '@joshpointer',
     images: ['/og-image.png'],
   },
   verification: {
     google: 'your-google-verification-code',
+    yandex: 'your-yandex-verification-code',
+    yahoo: 'your-yahoo-verification-code',
   },
   alternates: {
     canonical: 'https://joshpointer.com',
+    languages: {
+      'en-US': '/en-US',
+    },
+  },
+  category: 'technology',
+  classification: 'portfolio',
+  other: {
+    'mobile-web-app-capable': 'yes',
+    'apple-mobile-web-app-capable': 'yes',
+    'apple-mobile-web-app-status-bar-style': 'default',
+    'apple-mobile-web-app-title': branding.name,
+    'application-name': branding.name,
+    'msapplication-TileColor': '#000000',
+    'msapplication-config': '/browserconfig.xml',
   },
 };
 
@@ -184,8 +224,49 @@ export default function RootLayout() {
           type="font/woff2"
           crossOrigin="anonymous"
         />
+
+        {/* DNS prefetch for external resources */}
         <link rel="dns-prefetch" href="//fonts.googleapis.com" />
         <link rel="dns-prefetch" href="//fonts.gstatic.com" />
+        <link rel="dns-prefetch" href="//vercel.live" />
+
+        {/* Preconnect to external domains */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+
+        {/* Manifest and icons */}
+        <link rel="manifest" href="/manifest.json" />
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+        {/* Structured data for SEO */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'Person',
+              name: branding.name,
+              jobTitle: branding.tagline,
+              description: branding.description,
+              url: 'https://joshpointer.com',
+              sameAs: [
+                'https://github.com/joshpointer',
+                'https://linkedin.com/in/joshpointer',
+                'https://twitter.com/joshpointer',
+              ],
+              knowsAbout: [
+                'React Native',
+                'iOS Development',
+                'JavaScript',
+                'TypeScript',
+                'Three.js',
+                'WebGL',
+              ],
+            }),
+          }}
+        />
       </head>
       <Analytics />
       <SpeedInsights />
@@ -198,30 +279,23 @@ export default function RootLayout() {
                 <NavigationSync />
               </Suspense>
 
-              <Suspense fallback={<div />}>
+              {/* Main content with error boundary */}
+              <Suspense fallback={<LoadingFallback />}>
+                <PortfolioRouter />
+              </Suspense>
+
+              {/* UI Controls */}
+              <Suspense fallback={null}>
+                <div className="fixed top-4 right-4 z-50 flex gap-2">
+                  <ThemeToggle />
+                  <TransparencyToggle />
+                </div>
+              </Suspense>
+
+              {/* Scroll progress indicator */}
+              <Suspense fallback={null}>
                 <ScrollProgress />
               </Suspense>
-
-              <Suspense fallback={<div />}>
-                <ThemeToggle route={'home'} />
-              </Suspense>
-
-              <Suspense fallback={<div />}>
-                <TransparencyToggle route={'home'} />
-              </Suspense>
-
-              <main className="relative w-full h-screen">
-                {/* Responsive portfolio with progressive enhancement */}
-                <div
-                  className="fixed inset-0 w-full h-full"
-                  style={{ zIndex: 0 }}
-                  aria-hidden="true"
-                >
-                  <Suspense fallback={<div />}>
-                    <PortfolioRouter />
-                  </Suspense>
-                </div>
-              </main>
             </Providers>
           </TransparencyProvider>
         </Suspense>
