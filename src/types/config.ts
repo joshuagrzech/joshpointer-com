@@ -38,6 +38,12 @@ export interface Testimonial {
   company: string;
 }
 
+export interface ProjectMetrics {
+  downloads: string;
+  rating: string;
+  users: string;
+}
+
 export interface Config {
   theme: {
     colors: {
@@ -115,6 +121,7 @@ export interface Config {
       tags: string[];
       github?: string;
       url?: string;
+      metrics?: ProjectMetrics;
     }>;
   };
   skills: {
@@ -131,6 +138,8 @@ export interface Config {
       title: string;
       excerpt: string;
       date: string;
+      readTime?: string;
+      tags?: string[];
     }>;
   };
   links: Array<{
@@ -142,8 +151,9 @@ export interface Config {
     title: string;
     description: string;
     email: string;
+    availability?: string;
   };
   footer: {
     text: string;
   };
-} 
+}

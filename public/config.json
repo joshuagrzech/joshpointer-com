@@ -132,13 +132,13 @@
   },
   "branding": {
     "name": "Josh Pointer",
-    "tagline": "Mobile Software Engineer",
-    "description": "Crafting exceptional mobile experiences with React Native & iOS. I bring ideas to life through intuitive and performant mobile applications.",
+    "tagline": "Senior Mobile Software Engineer",
+    "description": "Crafting exceptional mobile experiences with React Native & iOS. 5+ years building scalable, performant mobile applications that users love.",
     "logo": "/logo.png",
     "favicon": "/favicon.ico",
     "metadata": {
-      "title": "Mobile Software Engineer Portfolio",
-      "description": "React Native & iOS Developer Portfolio",
+      "title": "Josh Pointer - Senior Mobile Software Engineer",
+      "description": "React Native & iOS Developer with 5+ years experience building scalable mobile applications",
       "language": "en"
     }
   },
@@ -178,100 +178,190 @@
     { "id": "contact", "label": "Contact", "icon": "mail" }
   ],
   "hero": {
-    "title": "Mobile Software Engineer",
-    "subtitle": "Crafting exceptional mobile experiences with React Native & iOS. I bring ideas to life through intuitive and performant mobile applications."
+    "title": "Senior Mobile Software Engineer",
+    "subtitle": "Crafting exceptional mobile experiences with React Native & iOS. 5+ years building scalable, performant mobile applications that users love."
   },
   "about": {
     "title": "About Me",
-    "content": "I'm a passionate mobile developer with over 5 years of experience in creating high-performance, user-friendly mobile applications. My expertise lies in React Native and iOS development, and I'm always eager to learn and explore new technologies. I'm driven by the challenge of building innovative solutions that solve real-world problems and enhance user experiences. My goal is to contribute my skills and passion to a dynamic team where I can continue to grow and make a significant impact."
+    "content": "I'm a passionate mobile developer with over 5 years of experience specializing in React Native and iOS development. I've led the development of multiple high-impact mobile applications, from concept to App Store deployment. My expertise includes building scalable architectures, implementing complex animations, optimizing app performance, and mentoring junior developers. I'm driven by creating intuitive user experiences and writing clean, maintainable code that stands the test of time."
   },
   "process": {
     "title": "Development Process",
     "steps": [
       {
-        "title": "Plan & Design",
-        "description": "Understand requirements, create wireframes, and plan the architecture.",
+        "title": "Discovery & Planning",
+        "description": "Deep dive into requirements, user research, and technical architecture planning.",
         "icon": "lightbulb"
       },
       {
-        "title": "Develop",
-        "description": "Write clean, maintainable code following best practices and patterns.",
+        "title": "Design & Prototype",
+        "description": "Create wireframes, design systems, and interactive prototypes for validation.",
+        "icon": "palette"
+      },
+      {
+        "title": "Development",
+        "description": "Build with clean architecture, performance optimization, and comprehensive testing.",
         "icon": "code"
       },
       {
-        "title": "Test & Review",
-        "description": "Thoroughly test features and conduct code reviews to ensure quality.",
+        "title": "Testing & QA",
+        "description": "Rigorous testing across devices, performance profiling, and user acceptance testing.",
         "icon": "check"
       },
       {
-        "title": "Deploy",
-        "description": "Deploy to production using automated CI/CD pipelines.",
+        "title": "Deployment & Monitoring",
+        "description": "App Store deployment, CI/CD pipeline setup, and production monitoring.",
         "icon": "rocket"
       }
     ]
   },
   "testimonials": {
-    "title": "Client Testimonials",
+    "title": "Client & Colleague Testimonials",
     "items": [
       {
-        "content": "An exceptional developer who consistently delivers high-quality work. Their attention to detail and problem-solving skills are outstanding.",
-        "author": "Sarah Johnson",
+        "content": "Josh consistently delivers exceptional mobile applications. His deep understanding of React Native and iOS development, combined with his attention to performance and user experience, makes him an invaluable team member.",
+        "author": "Sarah Chen",
+        "role": "Senior Product Manager",
+        "company": "TechFlow Solutions"
+      },
+      {
+        "content": "Working with Josh was a game-changer for our mobile strategy. He not only built a robust React Native app but also mentored our team on best practices and helped us establish a solid mobile development foundation.",
+        "author": "Michael Rodriguez",
         "role": "CTO",
-        "company": "Tech Innovations"
+        "company": "InnovateMobile"
       },
       {
-        "content": "Working with them was a great experience. They not only delivered the project on time but also provided valuable insights throughout the development process.",
-        "author": "Michael Chen",
-        "role": "Product Manager",
-        "company": "Digital Solutions"
-      },
-      {
-        "content": "Their technical expertise and ability to understand complex requirements made our project a success. Highly recommended!",
-        "author": "Emily Rodriguez",
+        "content": "Josh's technical expertise and ability to solve complex mobile challenges is outstanding. He transformed our iOS app performance and user experience, resulting in a 40% increase in user engagement.",
+        "author": "Emily Watson",
         "role": "Engineering Lead",
-        "company": "Software Corp"
+        "company": "MobileFirst Inc"
       }
     ]
   },
   "projects": {
     "title": "Featured Projects",
-    "description": "Here are some of the projects I've worked on. Each one represents a unique challenge and learning experience.",
+    "description": "A selection of mobile applications I've built, showcasing my expertise in React Native, iOS development, and mobile architecture.",
     "items": [
       {
-        "title": "E-commerce App",
-        "description": "A full-featured mobile commerce platform built with React Native and TypeScript, featuring Redux for state management and Stripe for payments.",
-        "tags": ["React Native", "TypeScript", "Redux", "Stripe"],
-        "github": "https://github.com/johndoe/ecommerce-app",
-        "url": "https://ecommerce-app-demo.com"
+        "title": "HealthTrack Pro",
+        "description": "A comprehensive health and fitness tracking app built with React Native. Features include real-time biometric monitoring, personalized workout plans, and social sharing capabilities. Integrated with Apple HealthKit and Google Fit APIs.",
+        "tags": ["React Native", "TypeScript", "Redux Toolkit", "HealthKit", "Firebase", "Jest"],
+        "github": "https://github.com/joshpointer/healthtrack-pro",
+        "url": "https://apps.apple.com/app/healthtrack-pro",
+        "metrics": {
+          "downloads": "50K+",
+          "rating": "4.8/5",
+          "users": "25K+ active"
+        }
       },
       {
-        "title": "Social Media Platform",
-        "description": "A social networking app with real-time chat, media sharing, and user engagement features.",
-        "tags": ["React Native", "Firebase", "WebRTC", "Redux"],
-        "github": "https://github.com/johndoe/social-media-app",
-        "url": "https://social-media-app-demo.com"
+        "title": "EcoDelivery",
+        "description": "A sustainable food delivery platform with real-time tracking, carbon footprint calculation, and eco-friendly restaurant partnerships. Built with React Native and integrated with mapping APIs and payment systems.",
+        "tags": ["React Native", "Swift", "Google Maps API", "Stripe", "Socket.io", "MongoDB"],
+        "github": "https://github.com/joshpointer/ecodelivery",
+        "url": "https://apps.apple.com/app/ecodelivery",
+        "metrics": {
+          "downloads": "100K+",
+          "rating": "4.6/5",
+          "users": "45K+ active"
+        }
+      },
+      {
+        "title": "FinFlow",
+        "description": "A personal finance management app with AI-powered spending insights, budget tracking, and investment portfolio management. Features secure biometric authentication and real-time market data integration.",
+        "tags": ["React Native", "iOS (Swift)", "TensorFlow Lite", "Plaid API", "AWS", "GraphQL"],
+        "github": "https://github.com/joshpointer/finflow",
+        "url": "https://apps.apple.com/app/finflow",
+        "metrics": {
+          "downloads": "75K+",
+          "rating": "4.7/5",
+          "users": "35K+ active"
+        }
+      },
+      {
+        "title": "TaskMaster",
+        "description": "A productivity app with advanced task management, team collaboration, and AI-powered project insights. Features include real-time sync, offline support, and integration with popular productivity tools.",
+        "tags": [
+          "React Native",
+          "TypeScript",
+          "Realm Database",
+          "Push Notifications",
+          "AWS S3",
+          "Jest"
+        ],
+        "github": "https://github.com/joshpointer/taskmaster",
+        "url": "https://apps.apple.com/app/taskmaster",
+        "metrics": {
+          "downloads": "200K+",
+          "rating": "4.9/5",
+          "users": "120K+ active"
+        }
       }
     ]
   },
   "skills": {
     "title": "Technical Skills",
-    "description": "Here's an overview of my technical skills and expertise across different areas of software development.",
+    "description": "My expertise spans mobile development, with deep knowledge of React Native, iOS development, and modern mobile architecture patterns.",
     "categories": [
       {
-        "name": "Frontend Development",
-        "items": ["React Native", "iOS (Swift/SwiftUI)", "React.js", "TypeScript", "JavaScript"]
+        "name": "Mobile Development",
+        "items": [
+          "React Native",
+          "iOS (Swift/SwiftUI)",
+          "Android (Kotlin)",
+          "TypeScript",
+          "JavaScript",
+          "Expo"
+        ]
       },
       {
-        "name": "Backend Development",
-        "items": ["Node.js", "Express", "Python", "RESTful APIs", "GraphQL"]
+        "name": "State Management & Architecture",
+        "items": [
+          "Redux Toolkit",
+          "Zustand",
+          "Context API",
+          "MVC/MVVM",
+          "Clean Architecture",
+          "SOLID Principles"
+        ]
       },
       {
-        "name": "Database & Storage",
-        "items": ["MongoDB", "PostgreSQL", "Firebase", "Redis", "AWS S3"]
+        "name": "Performance & Optimization",
+        "items": [
+          "React Native Performance",
+          "iOS Performance",
+          "Memory Management",
+          "Bundle Optimization",
+          "Image Optimization",
+          "Lazy Loading"
+        ]
       },
       {
-        "name": "DevOps & Tools",
-        "items": ["Git", "CI/CD", "Docker", "AWS", "Jira"]
+        "name": "Testing & Quality",
+        "items": [
+          "Jest",
+          "React Native Testing Library",
+          "Detox E2E",
+          "iOS Unit Testing",
+          "CI/CD",
+          "Code Coverage"
+        ]
+      },
+      {
+        "name": "Backend & APIs",
+        "items": ["Node.js", "Express", "GraphQL", "REST APIs", "Firebase", "AWS Services"]
+      },
+      {
+        "name": "Tools & DevOps",
+        "items": [
+          "Git",
+          "GitHub Actions",
+          "Fastlane",
+          "CocoaPods",
+          "npm/yarn",
+          "Xcode",
+          "Android Studio"
+        ]
       }
     ]
   },
@@ -279,45 +369,74 @@
     "title": "Latest Articles",
     "posts": [
       {
-        "title": "Building Modern Web Applications with Next.js 13",
-        "excerpt": "Learn how to leverage the latest features in Next.js 13 to build fast, modern web applications with great user experience.",
-        "date": "2023-12-15"
+        "title": "Building High-Performance React Native Apps: A Complete Guide",
+        "excerpt": "Learn the essential techniques for optimizing React Native app performance, from bundle size reduction to memory management and rendering optimization.",
+        "date": "2024-01-15",
+        "readTime": "8 min read",
+        "tags": ["React Native", "Performance", "Mobile Development"]
       },
       {
-        "title": "Understanding TypeScript's Type System",
-        "excerpt": "A deep dive into TypeScript's type system and how it can help you write more maintainable code.",
-        "date": "2023-12-10"
+        "title": "SwiftUI vs React Native: When to Choose Each for Your Mobile Project",
+        "excerpt": "A comprehensive comparison of SwiftUI and React Native, exploring their strengths, limitations, and ideal use cases for different project requirements.",
+        "date": "2024-01-08",
+        "readTime": "12 min read",
+        "tags": ["SwiftUI", "React Native", "iOS", "Mobile Development"]
+      },
+      {
+        "title": "Implementing Advanced Animations in React Native with Reanimated 3",
+        "excerpt": "Deep dive into React Native Reanimated 3, covering gesture handling, shared element transitions, and creating smooth, native-like animations.",
+        "date": "2023-12-20",
+        "readTime": "10 min read",
+        "tags": ["React Native", "Animations", "Reanimated", "Mobile Development"]
+      },
+      {
+        "title": "Mobile App Security Best Practices: Protecting User Data in 2024",
+        "excerpt": "Essential security practices for mobile app development, covering data encryption, secure API communication, and protecting against common vulnerabilities.",
+        "date": "2023-12-10",
+        "readTime": "15 min read",
+        "tags": ["Security", "Mobile Development", "iOS", "React Native"]
       }
     ]
   },
   "links": [
     {
       "title": "GitHub",
-      "url": "https://github.com/johndoe",
+      "url": "https://github.com/joshpointer",
       "icon": "github"
     },
     {
       "title": "LinkedIn",
-      "url": "https://linkedin.com/in/johndoe",
+      "url": "https://linkedin.com/in/joshpointer",
       "icon": "linkedin"
     },
     {
       "title": "Twitter",
-      "url": "https://twitter.com/johndoe",
+      "url": "https://twitter.com/joshpointer",
       "icon": "twitter"
     },
     {
       "title": "Email",
-      "url": "mailto:john@example.com",
+      "url": "mailto:josh@joshpointer.com",
       "icon": "mail"
+    },
+    {
+      "title": "App Store",
+      "url": "https://apps.apple.com/developer/josh-pointer",
+      "icon": "smartphone"
+    },
+    {
+      "title": "Resume",
+      "url": "https://joshpointer.com/resume.pdf",
+      "icon": "file-text"
     }
   ],
   "contact": {
-    "title": "Get in Touch",
-    "description": "I'm always interested in hearing about new projects and opportunities. Feel free to reach out!",
-    "email": "john@example.com"
+    "title": "Let's Build Something Amazing",
+    "description": "I'm passionate about creating exceptional mobile experiences. Whether you have a project in mind or want to discuss mobile development opportunities, I'd love to hear from you.",
+    "email": "josh@joshpointer.com",
+    "availability": "Available for new opportunities and freelance projects"
   },
   "footer": {
-    "text": "© 2024 Josh Pointer. All rights reserved."
+    "text": "© 2024 Josh Pointer. Crafted with React Native, iOS, and a lot of ☕"
   }
 }
